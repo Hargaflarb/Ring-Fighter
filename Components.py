@@ -46,3 +46,25 @@ class Transform(Component):
         pass
     def Update(self,delta_time):
         pass
+
+class Input_Handler():
+    def __init__(self, player):
+        super().__init__()
+        self._keybinds = {}
+        self._player = player
+
+    @property
+    def keybinds(self):
+        return self._keybinds
+    
+    @keybinds.setter
+    def keybinds(self, value):
+        self._keybinds
+
+    def Add_Command(self, key, command):
+        self.keybinds[key] = command
+
+    def Execute(self):
+        for keys in self.keybinds.keys():
+            if pygame.key.get_pressed() == keys:
+                self.keybinds[keys].Execute(self._player)

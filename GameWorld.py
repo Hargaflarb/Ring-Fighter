@@ -1,5 +1,6 @@
 import pygame
 from GameObject import GameObject
+from Characters.player import Player
 
 class Game_World:
     def __init__(self)->None:
@@ -21,7 +22,7 @@ class Game_World:
     def Awake(self):
         pass
     def Start(self):
-        pass
+        player = Player()
     def Update(self):
         while self.running:
             for event in pygame.event.get():

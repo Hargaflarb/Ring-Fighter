@@ -1,7 +1,8 @@
-import GameObject
+from GameObject import GameObject
 from abc import ABC
 
 class Character(GameObject, ABC):
 
     def __init__(self):
-        pass
+        super.__init__()
+        
