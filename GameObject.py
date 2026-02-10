@@ -7,7 +7,8 @@ class GameObject:
         #self.sprite=pygame.sprite.Sprite()
         #self.sprite.rect=self.sprite_image.get_rect()
         self.components={}
-        self.transform=self.Add_component(Transform(position))
+        # self.transform=self.Add_component(Transform(position))
+        self.Add_component(Transform(position))
         self.game_world=game_world
 
     @property
@@ -20,6 +21,19 @@ class GameObject:
         component.gameObject=self
         return component
     
+    def Get_component(self, component_name):
+        for component in self.components.values():
+            if component_name == component.__class__.__name__:
+                return component
+        return None
+    
+    def Has_component(self, component_name):
+        for component in self.components.values():
+            if component_name == component.__class__.__name__:
+                return True
+        return False
+
+    
     def Awake(self):
         for component in self.components.values():
             component.Awake(self.game_world)
@@ -27,9 +41,13 @@ class GameObject:
     def Start(self):
         for component in self.components.values():
             component.Start()
+    
     def Update(self,delta_time):
         #run components
         for component in self.components.values():
             component.Update(delta_time)
         #self.game_world.Screen.blit(self.sprite_image,self.sprite.rect)
+        pass
+
+    def OnCollision(self, other):
         pass

@@ -1,5 +1,7 @@
 import pygame
 from GameObject import GameObject
+from Components import Momentum
+from Components import Gravity
 
 class Game_World:
     def __init__(self)->None:
@@ -21,7 +23,11 @@ class Game_World:
     def Awake(self):
         pass
     def Start(self):
-        pass
+        gm = GameObject(self, (10,10))
+        gm.Add_component(Momentum())
+        gm.Add_component(Gravity())
+        self.game_objects_to_add.append(gm)
+
     def Update(self):
         while self.running:
             for event in pygame.event.get():
@@ -54,6 +60,18 @@ class Game_World:
             self.clock.tick(60)
         
         pygame.quit()
+
+    def Colision(self):
+        for obj1 in self.active_game_objects:
+            for obj2 in self.active_game_objects:
+                if obj1 != obj2: # aren't the same
+                    col1 = obj1.Get_component("Colider")
+                    col2 = obj2.Get_component("Colider")
+                    if col1 != None & col2 != None: # both has coliders
+                        col1.Check_collision(col2)
+
+
+
 
 gw=Game_World()
 gw.Awake()
