@@ -37,7 +37,7 @@ class Game_World:
                 if gameobject in self.active_game_objects:
                     self.active_game_objects.remove(gameobject)
             self.game_objects_to_remove.clear()
-
+            
             delta_time=self.clock.tick(60)/1000.0
 
             #background colour
