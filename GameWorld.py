@@ -1,5 +1,6 @@
 import pygame
 from GameObject import GameObject
+from Components import SpriteRenderer
 
 class Game_World:
     def __init__(self)->None:
@@ -11,7 +12,9 @@ class Game_World:
         self.active_game_objects=[]
         self.game_objects_to_add=[]
         self.game_objects_to_remove=[]
-        #self.active_game_objects.append(GameObject(self))
+        player=GameObject(self,(20,20))
+        self.game_objects_to_add.append(player)
+        player.Add_component(SpriteRenderer("temp playercharacter.png"))
 
 
     @property

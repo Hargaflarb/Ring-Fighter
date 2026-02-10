@@ -12,7 +12,7 @@ class Component(ABC):
     
     @gameObject.setter
     def gameObject(self,value):
-        self.gameObject=value
+        self._gameObject=value
 
     @abstractmethod
     def Awake(self,game_world):
@@ -35,14 +35,40 @@ class Transform(Component):
     
     @position.setter
     def position(self,value):
-        self.position=value
+        self._position=value
 
     def translate(self,direction):
         self.position+=direction
 
     def Awake(self,game_world):
         pass
+    
     def Start(self):
         pass
+
     def Update(self,delta_time):
         pass
+
+class SpriteRenderer(Component):
+    def __init__(self,sprite_name) ->None:
+        super().__init__()
+        self.sprite_image=pygame.image.load(f"assets\\{sprite_name}")
+        self.sprite=pygame.sprite.Sprite()
+        self.sprite.rect=self.sprite_image.get_rect()
+
+    def Awake(self,game_world):
+        self.game_world=game_world
+        
+    def Start(self):
+        pass
+
+    def Update(self,delta_time):
+        self.game_world.Screen.blit(self.sprite_image,self.sprite.rect)
+
+#collider
+
+#momentum
+
+#gravity
+
+#animator
