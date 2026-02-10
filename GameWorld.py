@@ -9,7 +9,9 @@ class Game_World:
         self.clock=pygame.time.Clock()
 
         self.active_game_objects=[]
-        self.active_game_objects.append(GameObject(self))
+        self.game_objects_to_add=[]
+        self.game_objects_to_remove=[]
+        #self.active_game_objects.append(GameObject(self))
 
 
     @property
@@ -26,6 +28,15 @@ class Game_World:
                 if event.type==pygame.QUIT:
                     self.running=False
             
+            #add & remove gameobjects during runtime
+            for gameobject in self.game_objects_to_add:
+                if gameobject not in self.active_game_objects:
+                    self.active_game_objects.append(gameobject)
+            self.game_objects_to_add.clear()
+            for gameobject in self.game_objects_to_remove:
+                if gameobject in self.active_game_objects:
+                    self.active_game_objects.remove(gameobject)
+
             delta_time=self.clock.tick(60)/1000.0
 
             #background colour
