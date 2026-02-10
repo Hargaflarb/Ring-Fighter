@@ -19,9 +19,11 @@ class Game_World:
             return self.screen
             
     def Awake(self):
-        pass
+        for gameobject in self.active_game_objects:
+            gameobject.Awake()
     def Start(self):
-        pass
+        for gameobject in self.active_game_objects:
+            gameobject.Start()
     def Update(self):
         while self.running:
             for event in pygame.event.get():
@@ -31,6 +33,8 @@ class Game_World:
             #add & remove gameobjects during runtime
             for gameobject in self.game_objects_to_add:
                 if gameobject not in self.active_game_objects:
+                    gameobject.Awake()
+                    gameobject.Start()
                     self.active_game_objects.append(gameobject)
             self.game_objects_to_add.clear()
             for gameobject in self.game_objects_to_remove:
