@@ -32,6 +32,8 @@ class Game_World:
         sm=SoundManager()
         sm.Add_sfx("ding-36029.mp3",0.5)
         sm.Play_sfx("ding-36029.mp3")
+        sm.Add_music("The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
+        sm.Play_music("The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3")
 
 
     @property

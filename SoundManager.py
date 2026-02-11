@@ -20,8 +20,9 @@ class SoundManager():
 
 
     def Play_music(self,music_name):
-        #self._current_music=self._music[music_name]
         pygame.mixer.music.load((f"assets\\{music_name}"))
+        pygame.mixer.music.play()
+        pygame.mixer.music.set_volume(self._music[music_name])
 
 class Sound():
     #most fields should not be editable after the class is initialised
