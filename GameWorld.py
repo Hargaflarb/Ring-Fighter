@@ -1,5 +1,7 @@
 import pygame
 from GameObject import GameObject
+from Components import SpriteRenderer
+from Components import Animator
 
 class Game_World:
     def __init__(self)->None:
@@ -11,7 +13,20 @@ class Game_World:
         self.active_game_objects=[]
         self.game_objects_to_add=[]
         self.game_objects_to_remove=[]
-        #self.active_game_objects.append(GameObject(self))
+        player=GameObject(self,(20,20))
+        self.game_objects_to_add.append(player)
+        #this could certainly be better
+        sr=player.Add_component(SpriteRenderer("temp playercharacter.png"))
+        an=player.Add_component(Animator(sr))
+        #could there be a way to add a folder without adding every frame? seems like that would be useful
+        an.Add_animation("TestWalk","temp playercharacter anim\\playerWalkShotgun0000.png",
+        "temp playercharacter anim\\playerWalkShotgun0001.png","temp playercharacter anim\\playerWalkShotgun0002.png",
+        "temp playercharacter anim\\playerWalkShotgun0003.png","temp playercharacter anim\\playerWalkShotgun0004.png",
+        "temp playercharacter anim\\playerWalkShotgun0005.png","temp playercharacter anim\\playerWalkShotgun0006.png",
+        "temp playercharacter anim\\playerWalkShotgun0007.png","temp playercharacter anim\\playerWalkShotgun0008.png",
+        "temp playercharacter anim\\playerWalkShotgun0009.png","temp playercharacter anim\\playerWalkShotgun0010.png")
+
+        an.Play_animation("TestWalk")
 
 
     @property
