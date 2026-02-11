@@ -75,8 +75,8 @@ class SpriteRenderer(Component):
     def __init__(self,sprite_name) ->None:
         super().__init__()
         self._sprite_image=pygame.image.load(f"assets\\{sprite_name}")
-        self.sprite=pygame.sprite.Sprite()
-        self.sprite.rect=self._sprite_image.get_rect()
+        self._sprite=pygame.sprite.Sprite()
+        self._sprite.rect=self._sprite_image.get_rect()
 
     @property
     def sprite_image(self):
@@ -88,12 +88,13 @@ class SpriteRenderer(Component):
 
     def Awake(self,game_world):
         self._game_world=game_world
+        self._sprite.rect.topleft=self.gameObject.transform.position
         
     def Start(self):
         pass
 
     def Update(self,delta_time):
-        self._game_world.Screen.blit(self.sprite_image,self.sprite.rect)
+        self._game_world.Screen.blit(self._sprite_image,self._sprite.rect)
 
 #collider
 
