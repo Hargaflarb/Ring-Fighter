@@ -14,7 +14,7 @@ class Game_World:
         self.active_game_objects=[]
         self.game_objects_to_add=[]
         self.game_objects_to_remove=[]
-        player=GameObject(self,(1000,20))
+        player=GameObject(self,(400,20))
         self.game_objects_to_add.append(player)
         #this could certainly be better
         sr=player.Add_component(SpriteRenderer("temp playercharacter.png"))
@@ -30,10 +30,10 @@ class Game_World:
         an.Play_animation("TestWalk")
         #this is just for testing purposes, feel free to remove
         sm=SoundManager()
-        sm.Add_sfx("ding-36029.mp3",0.5)
-        sm.Play_sfx("ding-36029.mp3")
-        sm.Add_music("The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
-        sm.Play_music("The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3")
+        sm.Add_sfx("Ding","ding-36029.mp3",0.5)
+        sm.Play_sfx("Ding")
+        sm.Add_music("spk","The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
+        sm.Play_music("spk")
         sm2=SoundManager()
         sm2.Stop_music()
 
