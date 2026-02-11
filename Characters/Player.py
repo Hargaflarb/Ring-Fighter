@@ -1,22 +1,16 @@
-from Characters import Character
+from GameObject import GameObject
 import Components
 import pygame
-from Commands import MoveCommand
+from abc import ABC
 
 
-class Player(Character):
-    def __init__(self):
-        super.__init__()
-        self._speed = 50
-        self.position = pygame.math.Vector2(0,0)
-        
+class Player(GameObject):
+    def __init__(self, game_world, position):
+        self.position = position
+        self.game_world = game_world
+        super().__init__(self.game_world, self.position)
 
-        self._inputhandler = Components.Input_Handler(self)
-    
-
-    def Start(self):
-        self._inputhandler.Add_Command(pygame.K_d, MoveCommand(self, pygame.math.Vector2(0,1)))
+        self.Add_component(Components.SpriteRenderer("temp playercharacter.png"))
 
  
 
-    
