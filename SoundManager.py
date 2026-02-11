@@ -12,13 +12,13 @@ class SoundManager():
         self._music={}
         self._current_music=None
 
-    def Add_sfx(self,sfx_name,volume):
-        sfx=pygame.mixer.Sound(f"assets\\{sfx_name}")
+    def Add_sfx(self,sfx_name,sfx_file,volume):
+        sfx=pygame.mixer.Sound(f"assets\\{sfx_file}")
         sfx.set_volume(volume)
         self._sound_effects[sfx_name]=sfx
 
-    def Add_music(self,music_name,volume):
-        self._music[music_name]=volume
+    def Add_music(self,music_name,music_file,volume):
+        self._music[music_name]=Audio(music_file,volume)
 
     def Play_sfx(self,sfx_name):
         active_sfx=self._sound_effects[sfx_name]
@@ -26,27 +26,23 @@ class SoundManager():
 
 
     def Play_music(self,music_name):
-        pygame.mixer.music.load((f"assets\\{music_name}"))
+
+        pygame.mixer.music.load((f"assets\\{self._music[music_name].file_name}"))
         pygame.mixer.music.play()
-        pygame.mixer.music.set_volume(self._music[music_name])
+        pygame.mixer.music.set_volume(self._music[music_name].volume)
 
     def Stop_music(self):
         pygame.mixer.music.stop()
 
-class Sound():
+class Audio():
     #most fields should not be editable after the class is initialised
-    def __init__(self,name,sound,volume):
-        self._sound_name=name
-        self._sound=sound
+    def __init__(self,file_name,volume):
+        self._file_name=file_name
         self._volume=volume
     
     @property
-    def name(self):
-        return self._sound_name
-    
-    @property
-    def sound(self):
-        return self._sound
+    def file_name(self):
+        return self._file_name
     
     @property
     def volume(self):
