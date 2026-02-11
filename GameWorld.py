@@ -2,6 +2,7 @@ import pygame
 from GameObject import GameObject
 from Components import SpriteRenderer
 from Components import Animator
+from SoundManager import SoundManager
 
 class Game_World:
     def __init__(self)->None:
@@ -27,6 +28,10 @@ class Game_World:
         "temp playercharacter anim\\playerWalkShotgun0009.png","temp playercharacter anim\\playerWalkShotgun0010.png")
 
         an.Play_animation("TestWalk")
+
+        sm=SoundManager()
+        sm.Add_sfx("ding-36029.mp3",0.5)
+        sm.Play_sfx("ding-36029.mp3")
 
 
     @property
