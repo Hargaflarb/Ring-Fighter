@@ -2,12 +2,11 @@ import pygame
 from Components import Transform
 
 class GameObject:
-    def __init__(self,game_world,position):
         
+    def __init__(self,game_world,position,scale):
         self.components={}
         self.game_world=game_world
-        self._transform=self.Add_component(Transform(position))
-        
+        self._transform=self.Add_component(Transform(position,scale))
 
     @property
     def transform(self):
