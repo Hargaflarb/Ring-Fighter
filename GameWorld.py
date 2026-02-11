@@ -14,7 +14,7 @@ class Game_World:
         self.active_game_objects=[]
         self.game_objects_to_add=[]
         self.game_objects_to_remove=[]
-        player=GameObject(self,(20,20))
+        player=GameObject(self,(1000,20))
         self.game_objects_to_add.append(player)
         #this could certainly be better
         sr=player.Add_component(SpriteRenderer("temp playercharacter.png"))

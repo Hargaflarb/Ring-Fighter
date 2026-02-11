@@ -6,12 +6,12 @@ class GameObject:
         
         self.components={}
         self.game_world=game_world
-        self.transform=self.Add_component(Transform(position))
+        self._transform=self.Add_component(Transform(position))
         
 
     @property
     def transform(self):
-        return self.transform
+        return self._transform
     
     @transform.setter
     def transform(self,value):
