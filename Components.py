@@ -25,9 +25,11 @@ class Component(ABC):
         pass
 
 class Transform(Component):
-    def __init__(self,position):
+
+    def __init__(self,position,scale):
         super().__init__()
         self._position=position
+        self._scale=scale
 
     @property
     def position(self):
@@ -36,6 +38,10 @@ class Transform(Component):
     @position.setter
     def position(self,value):
         self._position=value
+
+    @property
+    def scale(self):
+        return self._scale
 
     def translate(self,direction):
         self._position+=direction
@@ -67,7 +73,9 @@ class SpriteRenderer(Component):
 
     def Awake(self,game_world):
         self._game_world=game_world
+        self.sprite_image=pygame.transform.scale(self.sprite_image,(self.gameObject.transform.scale*self.sprite_image.width,(self.gameObject.transform.scale*self.sprite_image.height)))
         self._sprite.rect.topleft=self.gameObject.transform.position
+        
         
     def Start(self):
         pass
