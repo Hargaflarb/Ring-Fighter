@@ -28,12 +28,14 @@ class Game_World:
         "temp playercharacter anim\\playerWalkShotgun0009.png","temp playercharacter anim\\playerWalkShotgun0010.png")
 
         an.Play_animation("TestWalk")
-
+        #this is just for testing purposes, feel free to remove
         sm=SoundManager()
         sm.Add_sfx("ding-36029.mp3",0.5)
         sm.Play_sfx("ding-36029.mp3")
         sm.Add_music("The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
         sm.Play_music("The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3")
+        sm2=SoundManager()
+        sm2.Stop_music()
 
 
     @property
