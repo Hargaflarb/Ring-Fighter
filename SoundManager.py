@@ -13,7 +13,7 @@ class SoundManager():
         self._current_music=None
 
     def Add_sfx(self,sfx_name,sfx_file,volume):
-        sfx=pygame.mixer.Sound(f"assets\\{sfx_file}")
+        sfx=pygame.mixer.Sound(f"assets\\Audio\\{sfx_file}")
         sfx.set_volume(volume)
         self._sound_effects[sfx_name]=sfx
 
@@ -27,7 +27,7 @@ class SoundManager():
 
     def Play_music(self,music_name):
 
-        pygame.mixer.music.load((f"assets\\{self._music[music_name].file_name}"))
+        pygame.mixer.music.load((f"assets\\Audio\\{self._music[music_name].file_name}"))
         pygame.mixer.music.play()
         pygame.mixer.music.set_volume(self._music[music_name].volume)
 

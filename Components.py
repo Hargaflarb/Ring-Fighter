@@ -52,7 +52,7 @@ class Transform(Component):
 class SpriteRenderer(Component):
     def __init__(self,sprite_name) ->None:
         super().__init__()
-        self._sprite_image=pygame.image.load(f"assets\\{sprite_name}")
+        self._sprite_image=pygame.image.load(f"assets\\Images\\{sprite_name}")
         self._sprite=pygame.sprite.Sprite()
         self._sprite.rect=self._sprite_image.get_rect()
 
@@ -111,7 +111,7 @@ class Animator(Component):
     def Add_animation(self,animation_name,*args):
         frames=[]
         for arg in args:
-            sprite=pygame.image.load(f"assets\\{arg}")
+            sprite=pygame.image.load(f"assets\\Images\\{arg}")
             frames.append(sprite)
         self.animations[animation_name]=frames
         
