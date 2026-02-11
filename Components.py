@@ -49,27 +49,35 @@ class Transform(Component):
     def Update(self,delta_time):
         pass
 
-# class Input_Handler():
-#     def __init__(self, player):
-#         super().__init__()
-#         self._keybinds = {}
-#         self._player = player
+class Input_Handler():
+    def __init__(self, player):
+        super().__init__()
+        self._keybinds = {}
+        self._player = player
 
-#     @property
-#     def keybinds(self):
-#         return self._keybinds
+    @property
+    def keybinds(self):
+        return self._keybinds
     
-#     @keybinds.setter
-#     def keybinds(self, value):
-#         self._keybinds
+    @keybinds.setter
+    def keybinds(self, value):
+        self._keybinds
 
-#     def Add_Command(self, key, command):
-#         self.keybinds[key] = command
+    def Add_Command(self, key, command):
+        self.keybinds[key] = command
 
-#     def Execute(self):
-#         for keys in self.keybinds.keys():
-#             if pygame.key.get_pressed() == keys:
-#                 self.keybinds[keys].Execute(self._player)
+    def Update(self, delta_time):
+        keys = pygame.key.get_pressed()
+        
+        for key in self.keybinds.keys():
+            if keys[key]:
+                self.keybinds[key].Execute(delta_time)
+
+    def Awake(self,game_world):
+        pass
+        
+    def Start(self):
+        pass
 
 class SpriteRenderer(Component):
     def __init__(self,sprite_name) ->None:
@@ -88,12 +96,12 @@ class SpriteRenderer(Component):
 
     def Awake(self,game_world):
         self._game_world=game_world
-        self._sprite.rect.topleft=self.gameObject.transform.position
         
     def Start(self):
         pass
 
     def Update(self,delta_time):
+        self._sprite.rect.center=self.gameObject.transform.position
         self._game_world.Screen.blit(self._sprite_image,self._sprite.rect)
 
 #collider
