@@ -26,7 +26,7 @@ class SoundManager():
 
 
     def Play_music(self,music_name):
-
+        #!make sure the asset is in the correct sub-folder!
         pygame.mixer.music.load((f"assets\\Audio\\{self._music[music_name].file_name}"))
         pygame.mixer.music.play()
         pygame.mixer.music.set_volume(self._music[music_name].volume)
