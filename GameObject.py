@@ -2,23 +2,27 @@ import pygame
 from Components import Transform
 
 class GameObject:
-    def __init__(self,game_world,position):
-        #self.sprite_image=pygame.image.load("assets\\image.png")
-        #self.sprite=pygame.sprite.Sprite()
-        #self.sprite.rect=self.sprite_image.get_rect()
+        
+    def __init__(self,game_world,position,scale):
         self.components={}
-        # self.transform=self.Add_component(Transform(position))
-        self.Add_component(Transform(position))
         self.game_world=game_world
+        self._transform=self.Add_component(Transform(position,scale))
 
     @property
     def transform(self):
-        return self.transform
+        return self._transform
+    
+    @transform.setter
+    def transform(self,value):
+        self._transform=value
+
 
     def Add_component(self,component):
+        component.gameObject=self
         component_name=component.__class__.__name__
         self.components[component_name]=component
-        component.gameObject=self
+        component.Awake(self.game_world)
+        component.Start()
         return component
     
     def Get_component(self, component_name):
@@ -35,9 +39,8 @@ class GameObject:
 
     
     def Awake(self):
-        for component in self.components.values():
-            component.Awake(self.game_world)
-
+        pass
+            
     def Start(self):
         for component in self.components.values():
             component.Start()

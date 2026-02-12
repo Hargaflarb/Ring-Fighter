@@ -26,9 +26,11 @@ class Component(ABC):
         pass
 
 class Transform(Component):
-    def __init__(self,position):
+
+    def __init__(self,position,scale):
         super().__init__()
         self._position=position
+        self._scale=scale
 
     @property
     def position(self):
@@ -38,13 +40,19 @@ class Transform(Component):
     def position(self,value):
         self._position=value
 
+    @property
+    def scale(self):
+        return self._scale
+      
     def translate(self,direction):
         self.position = (self.position[0] + direction[0], self.position[1] + direction[1])
 
     def Awake(self,game_world):
         pass
+    
     def Start(self):
         pass
+
     def Update(self,delta_time):
         pass
 
@@ -165,3 +173,72 @@ class Colider(Component):
         pass
     def Update(self, delta_time):
         pass
+class SpriteRenderer(Component):
+    def __init__(self,sprite_name) ->None:
+        super().__init__()
+        #!make sure the asset is in the correct sub-folder!
+        self._sprite_image=pygame.image.load(f"assets\\Images\\{sprite_name}")
+        self._sprite=pygame.sprite.Sprite()
+        self._sprite.rect=self._sprite_image.get_rect()
+
+    @property
+    def sprite_image(self):
+        return self._sprite_image
+    
+    @sprite_image.setter
+    def sprite_image(self,value):
+        self._sprite_image=value
+
+    def Awake(self,game_world):
+        self._game_world=game_world
+        self.sprite_image=pygame.transform.scale(self.sprite_image,(self.gameObject.transform.scale*self.sprite_image.width,(self.gameObject.transform.scale*self.sprite_image.height)))
+        self._sprite.rect.topleft=self.gameObject.transform.position
+        
+        
+    def Start(self):
+        pass
+
+    def Update(self,delta_time):
+        self._game_world.Screen.blit(self._sprite_image,self._sprite.rect)
+
+
+class Animator(Component):
+    def __init__(self,spriterenderer):
+        super().__init__()
+        self.current_index=0
+        self.elapsed_time=0
+        #change below to gameobject.getcomponent
+        self._spriterenderer=spriterenderer
+        self.animations={}
+        self.frame_speed=0.1
+        self.current_animation=None
+
+    def Awake(self,game_world):
+        pass
+        
+    def Start(self):
+        pass
+
+    def Update(self,delta_time):
+        #set spriterenderer image
+        self._spriterenderer.sprite_image=self.current_animation[self.current_index]
+        self.elapsed_time+=delta_time
+        #switch to next frame
+        if self.elapsed_time>=self.frame_speed:
+            self.current_index+=1
+            if self.current_index >=len(self.current_animation):
+                self.current_index=0
+        
+
+    def Add_animation(self,animation_name,*args):
+        frames=[]
+        for arg in args:
+            #!make sure the asset is in the correct sub-folder!
+            sprite=pygame.image.load(f"assets\\Images\\{arg}")
+            frames.append(sprite)
+        self.animations[animation_name]=frames
+        
+
+    def Play_animation(self,animation_name):
+        self.current_animation=self.animations[animation_name]
+        
