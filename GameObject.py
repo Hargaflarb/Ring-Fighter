@@ -25,13 +25,32 @@ class GameObject:
         component.Start()
         return component
     
+    def Get_component(self, component_name):
+        for component in self.components.values():
+            if component_name == component.__class__.__name__:
+                return component
+        return None
+    
+    def Has_component(self, component_name):
+        for component in self.components.values():
+            if component_name == component.__class__.__name__:
+                return True
+        return False
+
+    
     def Awake(self):
         pass
             
     def Start(self):
-        pass
-
+        for component in self.components.values():
+            component.Start()
+    
     def Update(self,delta_time):
         #run components
         for component in self.components.values():
             component.Update(delta_time)
+        #self.game_world.Screen.blit(self.sprite_image,self.sprite.rect)
+        pass
+
+    def OnCollision(self, other):
+        pass

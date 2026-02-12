@@ -1,5 +1,8 @@
 import pygame
 from GameObject import GameObject
+from Components import Momentum
+from Components import Gravity
+from Components import Colider
 from Components import SpriteRenderer
 from Components import Animator
 from SoundManager import SoundManager
@@ -48,6 +51,18 @@ class Game_World:
         for gameobject in self.active_game_objects:
             gameobject.Awake()
     def Start(self):
+        # for tests
+        #gm = GameObject(self, (1.99,4))
+        #gm.Add_component(Momentum())
+        #gm.Add_component(Gravity())
+        #gm.Add_component(Colider((-1,-1,1,1)))
+        #self.game_objects_to_add.append(gm)
+
+        #gm2 = GameObject(self, (0,0))
+        #gm2.Add_component(Colider((-1,-1,1,1)))
+        #self.game_objects_to_add.append(gm2)
+
+
         for gameobject in self.active_game_objects:
             gameobject.Start()
     def Update(self):
@@ -62,12 +77,16 @@ class Game_World:
                     gameobject.Awake()
                     gameobject.Start()
                     self.active_game_objects.append(gameobject)
+                    gameobject.Awake()
+                    gameobject.Start()
             self.game_objects_to_add.clear()
             for gameobject in self.game_objects_to_remove:
                 if gameobject in self.active_game_objects:
                     self.active_game_objects.remove(gameobject)
             self.game_objects_to_remove.clear()
             
+            self.Collision()
+
             delta_time=self.clock.tick(60)/1000.0
 
             #background colour
@@ -84,6 +103,19 @@ class Game_World:
             self.clock.tick(60)
         
         pygame.quit()
+
+    def Collision(self):
+        for i, obj1 in enumerate(self.active_game_objects):
+            for j in range(i + 1, len(self.active_game_objects)):
+                    col1 = obj1.Get_component("Colider")
+                    col2 = self.active_game_objects[j].Get_component("Colider")
+                    if (col1 != None) & (col2 != None): # both has coliders
+                        if (col1.Check_collision(col2)): # does colide
+                            col1.On_collision(col2)
+                            col2.On_collision(col1)
+
+
+
 
 gw=Game_World()
 gw.Awake()
