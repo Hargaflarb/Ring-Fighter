@@ -1,5 +1,6 @@
 import pygame
 from abc import ABC,abstractmethod
+import math
 
 class Component(ABC):
     def __init__(self)->None:
@@ -81,7 +82,7 @@ class Momentum(Component):
 
     def Update(self, delta_time):
         transform = self.gameObject.Get_component("Transform")# Transform() # get the transform
-        direction = (self.vertical_momentum * delta_time, self.horizontal_momentum * delta_time)
+        direction = (self.horizontal_momentum * delta_time, self.vertical_momentum * delta_time)
         transform.translate(direction)
         print(f"momentum: {self.horizontal_momentum} | {self.vertical_momentum}")
         print(f"position: {transform.position}\n")
@@ -97,9 +98,8 @@ class Momentum(Component):
 class Colider(Component):
     def __init__(self, size):
         super().__init__()
-        self._size = size
-        # hard-collisions are only done for objects with Momentum.
-        self.hard_colider = not self.gameObject.Has_component("Momentum")
+        self._size = size # (X,Y,W,H) X = left - Xpos, Y = top - Ypos
+        self.hard_colider = False
 
     @property
     def size(self):
@@ -109,21 +109,58 @@ class Colider(Component):
     def size(self,value):
         self._size=value
 
+    @property
+    def rect(self):
+            pos = self.gameObject.Get_component("Transform").position
+            return ((pos[0] + self.size[0]), (pos[1] + self.size[1]), (pos[0] + self.size[2]), (pos[1] + self.size[3]))
+            
+
 
     def Check_collision(self, other_colider):
+        l1, b1, r1, t1 = self.rect
+        l2, b2, r2, t2 = other_colider.rect
+        return ((l1 < r2) & (r1 > l2)) & ((b1 < t2) & (t1 > b2))
+
+    def Check_Touch(self, other_colider):
+        l1, b1, r1, t1 = self.rect
+        l2, b2, r2, t2 = other_colider.rect
+        return ((l1 <= r2) & (r1 >= l2)) & ((b1 <= t2) & (t1 >= b2))
+
+    def Overlap(self, other_colider):
+        l1, b1, r1, t1 = self.rect
+        l2, b2, r2, t2 = other_colider.rect
+        return (max(l1,l2), max(b1,b2), min(r1, r2), min(t1, t2))
+
+
+    def On_collision(self, other_colider):
         if self.hard_colider:
             return
         if other_colider.hard_colider: # if only the other is a hard colider
-            # hard-collision
-            self.gameObject.Get_component("Momentum").vertical_momentum = 0
+            # hard colider
             print("hard collision")
+            overlap = self.Overlap(other_colider)
+
+            overlap_width = overlap[2] - overlap[0]
+            overlap_height = overlap[3] - overlap[1]
+
+            if overlap_width >= overlap_height:
+                pos = (0.0, overlap_height)
+                self.gameObject.Get_component("Momentum").vertical_momentum = 0
+            else:
+                pos = (overlap_width, 0.0)
+                self.gameObject.Get_component("Momentum").horizontal_momentum = 0
+
+            self.gameObject.Get_component("Transform").translate(pos)
+
         else: # if neither are hard coliders
             # custom collision
-            self.gameObject.OnCollision(other_colider.gameObject)
+            self.gameObject.OnCollision(other_colider.gameObject)        
 
 
     def Awake(self,game_world):
-        pass
+        # hard-collisions are only done for objects with Momentum.
+        self.hard_colider = not self.gameObject.Has_component("Momentum")
+
     def Start(self):
         pass
     def Update(self, delta_time):

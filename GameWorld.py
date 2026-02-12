@@ -2,6 +2,7 @@ import pygame
 from GameObject import GameObject
 from Components import Momentum
 from Components import Gravity
+from Components import Colider
 
 class Game_World:
     def __init__(self)->None:
@@ -23,10 +24,16 @@ class Game_World:
     def Awake(self):
         pass
     def Start(self):
-        gm = GameObject(self, (10,10))
+        gm = GameObject(self, (1.99,4))
         gm.Add_component(Momentum())
         gm.Add_component(Gravity())
+        gm.Add_component(Colider((-1,-1,1,1)))
         self.game_objects_to_add.append(gm)
+
+        gm2 = GameObject(self, (0,0))
+        gm2.Add_component(Colider((-1,-1,1,1)))
+        self.game_objects_to_add.append(gm2)
+
 
     def Update(self):
         while self.running:
@@ -38,12 +45,16 @@ class Game_World:
             for gameobject in self.game_objects_to_add:
                 if gameobject not in self.active_game_objects:
                     self.active_game_objects.append(gameobject)
+                    gameobject.Awake()
+                    gameobject.Start()
             self.game_objects_to_add.clear()
             for gameobject in self.game_objects_to_remove:
                 if gameobject in self.active_game_objects:
                     self.active_game_objects.remove(gameobject)
             self.game_objects_to_remove.clear()
             
+            self.Collision()
+
             delta_time=self.clock.tick(60)/1000.0
 
             #background colour
@@ -61,14 +72,15 @@ class Game_World:
         
         pygame.quit()
 
-    def Colision(self):
-        for obj1 in self.active_game_objects:
-            for obj2 in self.active_game_objects:
-                if obj1 != obj2: # aren't the same
+    def Collision(self):
+        for i, obj1 in enumerate(self.active_game_objects):
+            for j in range(i + 1, len(self.active_game_objects)):
                     col1 = obj1.Get_component("Colider")
-                    col2 = obj2.Get_component("Colider")
-                    if col1 != None & col2 != None: # both has coliders
-                        col1.Check_collision(col2)
+                    col2 = self.active_game_objects[j].Get_component("Colider")
+                    if (col1 != None) & (col2 != None): # both has coliders
+                        if (col1.Check_collision(col2)): # does colide
+                            col1.On_collision(col2)
+                            col2.On_collision(col1)
 
 
 
