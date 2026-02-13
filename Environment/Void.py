@@ -1,5 +1,5 @@
 from GameObject import GameObject
-import Components
+from Characters.Player import Player
 import pygame
 from abc import ABC
 from Components import Colider
@@ -10,16 +10,30 @@ class Void(GameObject):
         super().__init__(game_world, pygame.math.Vector2(640, 720), 1)
         self.Add_component(Colider((1000,50,1000,0), 3))
 
+        # saves the event trigger in a variable
+        self.trigger_round_over = game_world.Make_event("Round_Over").Trigger
+
 
     def OnCollision(self, other):
         if other.__class__.__name__ == "Player":
             print("Player died.")
             self.game_world.game_objects_to_remove.append(other)
-            # call methodes here?
 
+            # calls the methode that trigger the event
+            self.trigger_round_over(("it worked",))
+            
+            
 
+    def Awake(self):
+        # makes a lambda expression that is ran when the event is triggered (if you need multiple lines; use a methode)
+        fn = lambda args: self.game_world.game_objects_to_add.append(Player(self.game_world, pygame.math.Vector2(640, 360), 0.5))
 
+        # retrieves the event from the game world
+        event = self.game_world.Get_event("Round_Over")
 
-
- 
+        # attaches the lambda expression to the event
+        event.Subscribe(fn)
+        
+        # this can be done for any amount of lambda, methodes or functions, as long as they only take the one argument
+        # the argument is a tuple that can store multiple or no arguments
 
