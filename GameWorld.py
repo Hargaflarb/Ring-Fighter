@@ -31,7 +31,7 @@ class Game_World:
         # an.Play_animation("TestWalk")
         # #this is just for testing purposes, feel free to remove
 
-        player = Player(self, pygame.math.Vector2(0, 0))
+        player = Player(self, pygame.math.Vector2(100, 100))
         self.game_objects_to_add.append(player)
 
 

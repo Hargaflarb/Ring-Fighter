@@ -10,6 +10,7 @@ class Player(GameObject):
         super().__init__(game_world, position)
 
         speed = 50
+        self.transform.position = position
         sr = self.Add_component(Components.SpriteRenderer("temp playercharacter.png"))
         input_handler = self.Add_component(Components.Input_Handler(self))
         self._screen_size = pygame.math.Vector2(game_world.Screen.get_width(), game_world.screen.get_height())
