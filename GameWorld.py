@@ -5,9 +5,11 @@ from Components import Gravity
 from Components import Colider
 from Components import SpriteRenderer
 from Components import Animator
-from Characters.player import Player
+from Characters.Player import Player
 from Characters.Enemy import Enemy
+from Environment.Void import Void
 from SoundManager import SoundManager
+from Event import Event
 
 class Game_World:
     def __init__(self)->None:
@@ -15,6 +17,8 @@ class Game_World:
         self.screen=pygame.display.set_mode((1280,720))
         self.running=True
         self.clock=pygame.time.Clock()
+
+        self._events = {}
 
         self.active_game_objects=[]
         self.game_objects_to_add=[]
@@ -24,6 +28,12 @@ class Game_World:
         self.game_objects_to_add.append(player)
         enemy = Enemy(self, pygame.math.Vector2(800, 360), 0.5)
         self.game_objects_to_add.append(enemy)
+
+        floor = GameObject(self, pygame.math.Vector2(640, 720), 0.5)
+        floor.Add_component(Colider((500, 300, 500, 0), 1))
+        self.game_objects_to_add.append(floor)
+
+        self.game_objects_to_add.append(Void(self))
 
 
         sm=SoundManager()
@@ -43,18 +53,6 @@ class Game_World:
         for gameobject in self.active_game_objects:
             gameobject.Awake()
     def Start(self):
-        # for tests
-        #gm = GameObject(self, (1.99,4))
-        #gm.Add_component(Momentum())
-        #gm.Add_component(Gravity())
-        #gm.Add_component(Colider((-1,-1,1,1)))
-        #self.game_objects_to_add.append(gm)
-
-        #gm2 = GameObject(self, (0,0))
-        #gm2.Add_component(Colider((-1,-1,1,1)))
-        #self.game_objects_to_add.append(gm2)
-
-
         for gameobject in self.active_game_objects:
             gameobject.Start()
     def Update(self):
@@ -66,8 +64,6 @@ class Game_World:
             #add & remove gameobjects during runtime
             for gameobject in self.game_objects_to_add:
                 if gameobject not in self.active_game_objects:
-                    gameobject.Awake()
-                    gameobject.Start()
                     self.active_game_objects.append(gameobject)
                     gameobject.Awake()
                     gameobject.Start()
@@ -106,6 +102,19 @@ class Game_World:
                             col1.On_collision(col2)
                             col2.On_collision(col1)
 
+    def Make_event(self, name):
+        new_event = Event()
+        self._events[name] = new_event
+        return new_event
+    
+    def Get_event(self, name):
+        if name in self._events.keys():
+            return self._events[name]
+        
+    def Delete_event(self, name):
+        if name in self._events.keys():
+            del self._events[name]
+        
 
 
 

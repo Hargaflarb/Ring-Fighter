@@ -1,4 +1,4 @@
-from Commands.command import Command
+from Commands.Command import Command
 import pygame
 
 class MoveCommand(Command):
