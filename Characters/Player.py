@@ -18,7 +18,8 @@ class Player(GameObject):
         self.transform.position.y -= (self._sprite_size.y/2)
         self.game_world = game_world
 
-        input_handler.Add_Command(pygame.K_d, MoveCommand(self, pygame.math.Vector2(0, 1), speed))
+        input_handler.Add_Command(pygame.K_d, MoveCommand(self, pygame.math.Vector2(1, 0), speed))
+        input_handler.Add_Command(pygame.K_a, MoveCommand(self, pygame.math.Vector2(-1, 0), speed))
 
 
 
