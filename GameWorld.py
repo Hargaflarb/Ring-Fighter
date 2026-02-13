@@ -8,6 +8,7 @@ from Components import Animator
 from Characters.Player import Player
 from Environment.Void import Void
 from SoundManager import SoundManager
+from Event import Event
 
 class Game_World:
     def __init__(self)->None:
@@ -15,6 +16,8 @@ class Game_World:
         self.screen=pygame.display.set_mode((1280,720))
         self.running=True
         self.clock=pygame.time.Clock()
+
+        self._events = {}
 
         self.active_game_objects=[]
         self.game_objects_to_add=[]
@@ -27,8 +30,7 @@ class Game_World:
         floor.Add_component(Colider((500, 300, 500, 0), 1))
         self.game_objects_to_add.append(floor)
 
-        void = Void(self)
-        self.game_objects_to_add.append(void)
+        self.game_objects_to_add.append(Void(self))
 
 
         sm=SoundManager()
@@ -59,8 +61,6 @@ class Game_World:
             #add & remove gameobjects during runtime
             for gameobject in self.game_objects_to_add:
                 if gameobject not in self.active_game_objects:
-                    gameobject.Awake()
-                    gameobject.Start()
                     self.active_game_objects.append(gameobject)
                     gameobject.Awake()
                     gameobject.Start()
@@ -99,6 +99,19 @@ class Game_World:
                             col1.On_collision(col2)
                             col2.On_collision(col1)
 
+    def Make_event(self, name):
+        new_event = Event()
+        self._events[name] = new_event
+        return new_event
+    
+    def Get_event(self, name):
+        if name in self._events.keys():
+            return self._events[name]
+        
+    def Delete_event(self, name):
+        if name in self._events.keys():
+            del self._events[name]
+        
 
 
 
