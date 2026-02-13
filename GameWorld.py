@@ -6,6 +6,7 @@ from Components import Colider
 from Components import SpriteRenderer
 from Components import Animator
 from Characters.Player import Player
+from Environment.Void import Void
 from SoundManager import SoundManager
 
 class Game_World:
@@ -25,6 +26,9 @@ class Game_World:
         floor = GameObject(self, pygame.math.Vector2(640, 720), 0.5)
         floor.Add_component(Colider((500, 300, 500, 0), 1))
         self.game_objects_to_add.append(floor)
+
+        void = Void(self)
+        self.game_objects_to_add.append(void)
 
 
         sm=SoundManager()

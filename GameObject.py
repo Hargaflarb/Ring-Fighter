@@ -25,16 +25,18 @@ class GameObject:
         component.Start()
         return component
     
+    def Remove_component(self, component_name):
+        if component_name in self.components.keys():
+            del self.components[component_name]
+
     def Get_component(self, component_name):
-        for component in self.components.values():
-            if component_name == component.__class__.__name__:
-                return component
+        if component_name in self.components.keys():
+            return self.components[component_name]
         return None
     
     def Has_component(self, component_name):
-        for component in self.components.values():
-            if component_name == component.__class__.__name__:
-                return True
+        if component_name in self.components.keys():
+            return True
         return False
 
     
