@@ -1,6 +1,6 @@
 import pygame
 from abc import ABC,abstractmethod
-import math
+
 
 class Component(ABC):
     def __init__(self)->None:
@@ -139,54 +139,75 @@ class Momentum(Component):
     
     
 class Colider(Component):
-    def __init__(self, size):
+    def __init__(self, rect, colider_type):
         super().__init__()
-        self._size = size # (L,B,R,T) L = left dist, B = bottom dist, R = right dist, T = top dist
-        self.hard_colider = False
+        # (L,T,R,B) L = left dist, T = top dist, R = right dist, B = bottom dist
+        self._rect = rect
+        self.colider_type = colider_type
+        # 1 = Hard colider; can't be pushed, but pushes soft coliders
+        # 2 = Soft colider; is pushed by hard coliders, but can't push itself
+        # 3 = Transparent colider; can't be pushed and does not push itself
 
-    @property
-    def size(self):
-        return self._size
-    
-    @size.setter
-    def size(self,value):
-        self._size=value
+    # def __init__(self, size, colider_type):
+    #     super().__init__()
+    #     # (W,H) W = width, H = height
+    #     self._rect = (size[0]/2,size[1],size[0]/2,0)
+    #     self.colider_type = colider_type
+    #     # 1 = Hard colider; can't be pushed, but pushes soft coliders
+    #     # 2 = Soft colider; is pushed by hard coliders, but can't push itself
+    #     # 3 = Transparent colider; can't be pushed and does not push itself
+
 
     @property
     def rect(self):
-            pos = self.gameObject.Get_component("Transform").position
-            return ((pos[0] - self.size[0]), (pos[1] + self.size[1]), (pos[0] + self.size[2]), (pos[1] - self.size[3]))
+        return self._rect
+    
+    @rect.setter
+    def rect(self,value):
+        self._rect=value
+
+    @property
+    def pos_rect(self):
+            pos = self.gameObject.transform.position
+            return ((pos[0] - self.rect[0]), (pos[1] - self.rect[1]), (pos[0] + self.rect[2]), (pos[1] + self.rect[3]))
+    
+    @property
+    def pos_sized_rect(self):
+            pos = self.gameObject.transform.position
+            return ((pos[0] - self.rect[0]), (pos[1] - self.rect[1]), (self.rect[0] + self.rect[2]), (self.rect[1] + self.rect[3]))
             
 
 
     def Check_collision(self, other_colider):
-        l1, b1, r1, t1 = self.rect
-        l2, b2, r2, t2 = other_colider.rect
-        # print(f"{(l1 < r2)} | {(r1 > l2)} | {(t1 < b2)} | {(b1 > t2)}")
+        l1, t1, r1, b1 = self.pos_rect
+        l2, t2, r2, b2 = other_colider.pos_rect
+        #print(f"{(l1 < r2)} | {(r1 > l2)} | {(t1 < b2)} | {(b1 > t2)}")
         return ((l1 < r2) & (r1 > l2)) & ((t1 < b2) & (b1 > t2))
 
     def Check_Touch(self, other_colider):
-        l1, b1, r1, t1 = self.rect
-        l2, b2, r2, t2 = other_colider.rect
+        l1, t1, r1, b1 = self.pos_rect
+        l2, t2, r2, b2 = other_colider.pos_rect
         return ((l1 <= r2) & (r1 >= l2)) & ((t1 <= b2) & (b1 >= t2))
 
     def Overlap(self, other_colider):
-        l1, b1, r1, t1 = self.rect
-        l2, b2, r2, t2 = other_colider.rect
-        #print(f"{(max(l1,l2), min(b1,b2), min(r1, r2), max(t1, t2))}")
-        return (max(l1,l2), min(b1,b2), min(r1, r2), max(t1, t2))
+        l1, t1, r1, b1 = self.pos_rect
+        l2, t2, r2, b2 = other_colider.pos_rect
+        # print(f"{(self.Lower_absolute_value(r2 - l1, l2 - r1), self.Lower_absolute_value(t2 - b1, b2 - t1))}")
+        return (self.Lower_absolute_value(r2 - l1, l2 - r1), self.Lower_absolute_value(t2 - b1, b2 - t1))
 
+    def Lower_absolute_value(self, value1, value2):
+        if abs(value1) < abs(value2):
+            return value1
+        return value2
+    
 
     def On_collision(self, other_colider):
-        if self.hard_colider:
-            return
-        if other_colider.hard_colider: # if only the other is a hard colider
-            # hard colider
-            print("hard collision")
+        if (self.colider_type == 2) & (other_colider.colider_type == 1): # hard collision
+            #print("hard collision")
             overlap = self.Overlap(other_colider)
 
-            overlap_width = overlap[2] - overlap[0]
-            overlap_height = overlap[3] - overlap[1]
+            overlap_width = overlap[0]
+            overlap_height = overlap[1]
 
             if abs(overlap_width) >= abs(overlap_height):
                 pos = (0.0, overlap_height)
@@ -195,21 +216,21 @@ class Colider(Component):
                 pos = (overlap_width, 0.0)
                 self.gameObject.Get_component("Momentum").horizontal_momentum = 0
 
-            self.gameObject.Get_component("Transform").translate(pos)
+            self.gameObject.transform.translate(pos)
 
-        else: # if neither are hard coliders
-            # custom collision
-            self.gameObject.OnCollision(other_colider.gameObject)        
+        # custom collision
+        self.gameObject.OnCollision(other_colider.gameObject)        
 
 
     def Awake(self,game_world):
-        # hard-collisions are only done for objects with Momentum.
-        self.hard_colider = not self.gameObject.Has_component("Momentum")
-
+        self._game_world = game_world
     def Start(self):
         pass
     def Update(self, delta_time):
-        pass
+        # draw hitboxes
+        pygame.draw.rect(self._game_world.Screen, pygame.color.Color(255,0,0), pygame.rect.Rect(self.pos_sized_rect), 1)
+        pygame.draw.circle(self._game_world.Screen, pygame.color.Color(255,0,0), self.gameObject.transform.position, 1, 0)
+
 
 class SpriteRenderer(Component):
     def __init__(self,sprite_name) ->None:
@@ -242,7 +263,7 @@ class SpriteRenderer(Component):
 
     def Apply_sprite_offset(self, position):
         x = position[0] - (self.sprite_image.get_width()/2)
-        y = position[1] - (self.sprite_image.get_height()/2)
+        y = position[1] - (self.sprite_image.height)
         return pygame.math.Vector2(x,y)
 
 

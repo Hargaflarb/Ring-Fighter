@@ -3,6 +3,9 @@ import Components
 import pygame
 from abc import ABC
 from Commands.move_command import MoveCommand
+from Components import Momentum
+from Components import Gravity
+from Components import Colider
 
 
 class Player(GameObject):
@@ -18,6 +21,12 @@ class Player(GameObject):
 
         input_handler.Add_Command(pygame.K_d, MoveCommand(self, pygame.math.Vector2(1, 0), speed))
         input_handler.Add_Command(pygame.K_a, MoveCommand(self, pygame.math.Vector2(-1, 0), speed))
+
+
+        self.Add_component(Momentum())
+        self.Add_component(Gravity())
+        self.Add_component(Colider((self._sprite_size[0]/2,self._sprite_size[1],self._sprite_size[0]/2,0), 2))
+
 
 
 

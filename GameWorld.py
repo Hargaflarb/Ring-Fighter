@@ -20,13 +20,10 @@ class Game_World:
         self.game_objects_to_remove=[]
 
         player = Player(self, pygame.math.Vector2(640, 360), 0.5)
-        player.Add_component(Momentum())
-        player.Add_component(Gravity())
-        player.Add_component(Colider((1, 0, 1, 10)))
         self.game_objects_to_add.append(player)
 
-        floor = GameObject(self, pygame.math.Vector2(640, 370), 0.5)
-        floor.Add_component(Colider((1, 10, 1, 0)))
+        floor = GameObject(self, pygame.math.Vector2(640, 720), 0.5)
+        floor.Add_component(Colider((500, 300, 500, 0), 1))
         self.game_objects_to_add.append(floor)
 
 
