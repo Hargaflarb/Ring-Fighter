@@ -5,7 +5,7 @@ from Components import Gravity
 from Components import Colider
 from Components import SpriteRenderer
 from Components import Animator
-from Characters.player import Player
+from Characters.Player import Player
 from SoundManager import SoundManager
 
 class Game_World:
@@ -20,7 +20,14 @@ class Game_World:
         self.game_objects_to_remove=[]
 
         player = Player(self, pygame.math.Vector2(640, 360), 0.5)
+        player.Add_component(Momentum())
+        player.Add_component(Gravity())
+        player.Add_component(Colider((1, 0, 1, 10)))
         self.game_objects_to_add.append(player)
+
+        floor = GameObject(self, pygame.math.Vector2(640, 370), 0.5)
+        floor.Add_component(Colider((1, 10, 1, 0)))
+        self.game_objects_to_add.append(floor)
 
 
         sm=SoundManager()
@@ -40,18 +47,6 @@ class Game_World:
         for gameobject in self.active_game_objects:
             gameobject.Awake()
     def Start(self):
-        # for tests
-        #gm = GameObject(self, (1.99,4))
-        #gm.Add_component(Momentum())
-        #gm.Add_component(Gravity())
-        #gm.Add_component(Colider((-1,-1,1,1)))
-        #self.game_objects_to_add.append(gm)
-
-        #gm2 = GameObject(self, (0,0))
-        #gm2.Add_component(Colider((-1,-1,1,1)))
-        #self.game_objects_to_add.append(gm2)
-
-
         for gameobject in self.active_game_objects:
             gameobject.Start()
     def Update(self):

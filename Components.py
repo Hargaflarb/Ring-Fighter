@@ -92,8 +92,13 @@ class Gravity(Component):
     def __init__(self):
         super().__init__()
         self.last_delta_time = 0
-        self.gravity = -9.82
+        self._gravity = 9.82
+        self._gravity_multiplier = 20
         
+    @property
+    def gravity(self):
+        return self._gravity * self._gravity_multiplier
+
     def Awake(self,game_world):
         pass
     def Start(self):
@@ -122,8 +127,8 @@ class Momentum(Component):
         transform = self.gameObject.Get_component("Transform")# Transform() # get the transform
         direction = (self.horizontal_momentum * delta_time, self.vertical_momentum * delta_time)
         transform.translate(direction)
-        print(f"momentum: {self.horizontal_momentum} | {self.vertical_momentum}")
-        print(f"position: {transform.position}\n")
+        # print(f"momentum: {self.horizontal_momentum} | {self.vertical_momentum}")
+        # print(f"position: {transform.position}\n")
         return super().Update(delta_time)
     
 
@@ -136,7 +141,7 @@ class Momentum(Component):
 class Colider(Component):
     def __init__(self, size):
         super().__init__()
-        self._size = size # (X,Y,W,H) X = left - Xpos, Y = top - Ypos
+        self._size = size # (L,B,R,T) L = left dist, B = bottom dist, R = right dist, T = top dist
         self.hard_colider = False
 
     @property
@@ -150,24 +155,26 @@ class Colider(Component):
     @property
     def rect(self):
             pos = self.gameObject.Get_component("Transform").position
-            return ((pos[0] + self.size[0]), (pos[1] + self.size[1]), (pos[0] + self.size[2]), (pos[1] + self.size[3]))
+            return ((pos[0] - self.size[0]), (pos[1] + self.size[1]), (pos[0] + self.size[2]), (pos[1] - self.size[3]))
             
 
 
     def Check_collision(self, other_colider):
         l1, b1, r1, t1 = self.rect
         l2, b2, r2, t2 = other_colider.rect
-        return ((l1 < r2) & (r1 > l2)) & ((b1 < t2) & (t1 > b2))
+        # print(f"{(l1 < r2)} | {(r1 > l2)} | {(t1 < b2)} | {(b1 > t2)}")
+        return ((l1 < r2) & (r1 > l2)) & ((t1 < b2) & (b1 > t2))
 
     def Check_Touch(self, other_colider):
         l1, b1, r1, t1 = self.rect
         l2, b2, r2, t2 = other_colider.rect
-        return ((l1 <= r2) & (r1 >= l2)) & ((b1 <= t2) & (t1 >= b2))
+        return ((l1 <= r2) & (r1 >= l2)) & ((t1 <= b2) & (b1 >= t2))
 
     def Overlap(self, other_colider):
         l1, b1, r1, t1 = self.rect
         l2, b2, r2, t2 = other_colider.rect
-        return (max(l1,l2), max(b1,b2), min(r1, r2), min(t1, t2))
+        #print(f"{(max(l1,l2), min(b1,b2), min(r1, r2), max(t1, t2))}")
+        return (max(l1,l2), min(b1,b2), min(r1, r2), max(t1, t2))
 
 
     def On_collision(self, other_colider):
@@ -181,7 +188,7 @@ class Colider(Component):
             overlap_width = overlap[2] - overlap[0]
             overlap_height = overlap[3] - overlap[1]
 
-            if overlap_width >= overlap_height:
+            if abs(overlap_width) >= abs(overlap_height):
                 pos = (0.0, overlap_height)
                 self.gameObject.Get_component("Momentum").vertical_momentum = 0
             else:
@@ -230,8 +237,14 @@ class SpriteRenderer(Component):
         pass
 
     def Update(self,delta_time):
-        self._sprite.rect.topleft=self.gameObject.transform.position
+        self._sprite.rect.topleft = self.Apply_sprite_offset(self.gameObject.transform.position)
         self._game_world.Screen.blit(self._sprite_image,self._sprite.rect)
+
+    def Apply_sprite_offset(self, position):
+        x = position[0] - (self.sprite_image.get_width()/2)
+        y = position[1] - (self.sprite_image.get_height()/2)
+        return pygame.math.Vector2(x,y)
+
 
 
 class Animator(Component):
