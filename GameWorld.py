@@ -6,6 +6,7 @@ from Components import Colider
 from Components import SpriteRenderer
 from Components import Animator
 from Characters.Player import Player
+from Characters.Enemy import Enemy
 from Environment.Void import Void
 from SoundManager import SoundManager
 from Event import Event
