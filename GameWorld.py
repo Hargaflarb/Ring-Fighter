@@ -6,6 +6,7 @@ from Components import Colider
 from Components import SpriteRenderer
 from Components import Animator
 from Characters.player import Player
+from Characters.Enemy import Enemy
 from SoundManager import SoundManager
 
 class Game_World:
@@ -21,6 +22,8 @@ class Game_World:
 
         player = Player(self, pygame.math.Vector2(640, 360), 0.5)
         self.game_objects_to_add.append(player)
+        enemy = Enemy(self, pygame.math.Vector2(800, 360), 0.5)
+        self.game_objects_to_add.append(enemy)
 
 
         sm=SoundManager()
