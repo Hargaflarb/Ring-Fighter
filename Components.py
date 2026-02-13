@@ -203,6 +203,7 @@ class Colider(Component):
         pass
     def Update(self, delta_time):
         pass
+
 class SpriteRenderer(Component):
     def __init__(self,sprite_name) ->None:
         super().__init__()
@@ -229,7 +230,7 @@ class SpriteRenderer(Component):
         pass
 
     def Update(self,delta_time):
-        self._sprite.rect.center=self.gameObject.transform.position
+        self._sprite.rect.topleft=self.gameObject.transform.position
         self._game_world.Screen.blit(self._sprite_image,self._sprite.rect)
 
 
