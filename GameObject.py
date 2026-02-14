@@ -41,7 +41,8 @@ class GameObject:
 
     
     def Awake(self):
-        pass
+        for component in self.components.values():
+            component.Awake(self.game_world)
             
     def Start(self):
         for component in self.components.values():

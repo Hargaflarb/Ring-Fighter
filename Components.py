@@ -27,10 +27,11 @@ class Component(ABC):
 
 class Transform(Component):
 
-    def __init__(self,position,scale):
+    def __init__(self,position,scale, facing = 1):
         super().__init__()
         self._position=position
         self._scale=scale
+        self.facing = facing
 
     @property
     def position(self):
@@ -93,7 +94,7 @@ class Gravity(Component):
         super().__init__()
         self.last_delta_time = 0
         self._gravity = 9.82
-        self._gravity_multiplier = 20
+        self._gravity_multiplier = 30
         
     @property
     def gravity(self):
@@ -113,10 +114,10 @@ class Gravity(Component):
 
 
 class Momentum(Component):
-    def __init__(self):
+    def __init__(self, momentum = (0.0,0.0)):
         super().__init__()
-        self.vertical_momentum = 0.0
-        self.horizontal_momentum = 0.0
+        self.horizontal_momentum = momentum[0]
+        self.vertical_momentum = momentum[1]
 
     def Awake(self,game_world):
         pass
@@ -133,8 +134,8 @@ class Momentum(Component):
     
 
     def Give_Momentum(self):
-        self.vertical_momentum = 1
         self.horizontal_momentum = 1
+        self.vertical_momentum = 1
 
     
     
