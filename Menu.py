@@ -5,7 +5,9 @@ class Start_menu:
         self.screen=screen
         self.font=pygame.font.SysFont("arialblack",40)
         self.text_colour=(0,0,0)
+        self.showing_options=False
         self.create_menu()
+        self.create_options()
 
     def create_menu(self):
         start_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\startbtn.png")
@@ -14,14 +16,22 @@ class Start_menu:
         self.options_button=Button(self.screen.width/2,300,options_btn_image,1)
         quit_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\quitbtn.png")
         self.quit_button=Button(self.screen.width/2,450,quit_btn_image,1)
+
+    def create_options(self):
+        back_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\backbtn.png")
+        self.back_button=Button(200,self.screen.height-150,back_btn_image,1)
         
     def draw_menu(self):
-        if self.start_button.draw(self.screen):
-            return "start"
-        if self.options_button.draw(self.screen):
-            print ("pressed options")
-        if self.quit_button.draw(self.screen):
-            return "quit"
+        if self.showing_options==False:
+            if self.start_button.draw(self.screen):
+                return "start"
+            if self.options_button.draw(self.screen):
+                self.showing_options=True
+            if self.quit_button.draw(self.screen):
+                return "quit"
+        else:
+            if self.back_button.draw(self.screen):
+                self.showing_options=False
         
     def draw_text(self,text,x,y):
         img=self.font.render(text,True,self.text_colour)
