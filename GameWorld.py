@@ -47,7 +47,7 @@ class Game_World:
         sm.Add_music("spk","The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
         sm.Play_music("spk")
         sm2=SoundManager()
-        sm2.Stop_music()
+        #sm2.Stop_music()
 
 
     @property
@@ -88,6 +88,7 @@ class Game_World:
             #add things to draw
             #basic state, can be removed later
             if self.showing_menu:
+                #also add menu background here
                 returned_string=self.menu.draw_menu()
                 if returned_string=="start":
                     self.showing_menu=False

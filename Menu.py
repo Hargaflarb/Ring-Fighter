@@ -1,13 +1,17 @@
 import pygame
+from SoundManager import SoundManager
 
 class Start_menu:
     def __init__(self,screen):
         self.screen=screen
-        self.font=pygame.font.SysFont("arialblack",40)
+        self.font=pygame.font.SysFont("arialblack",60)
         self.text_colour=(0,0,0)
         self.showing_options=False
+        self.music_volume_number=10
+        self.sfx_volume_number=10
         self.create_menu()
         self.create_options()
+        self.sm=SoundManager()
 
     def create_menu(self):
         start_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\startbtn.png")
@@ -20,7 +24,18 @@ class Start_menu:
     def create_options(self):
         back_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\backbtn.png")
         self.back_button=Button(200,self.screen.height-150,back_btn_image,1)
+        plus_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\plusbtn.png")
+        self.plus_music_button=Button(self.screen.width/2-200,120,plus_btn_image,1)
+        minus_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\minusbtn.png")
+        self.minus_music_button=Button(self.screen.width/2+200,120,minus_btn_image,1)
+
+        self.plus_sfx_button=Button(self.screen.width/2-200,350,plus_btn_image,1)
+        self.minus_sfx_button=Button(self.screen.width/2+200,350,minus_btn_image,1)
         
+    def draw_text(self,text,x,y):
+        img=self.font.render(text,True,self.text_colour)
+        self.screen.blit(img,(x,y))
+
     def draw_menu(self):
         if self.showing_options==False:
             if self.start_button.draw(self.screen):
@@ -30,13 +45,36 @@ class Start_menu:
             if self.quit_button.draw(self.screen):
                 return "quit"
         else:
+            self.draw_text("Music volume",self.screen.width/2-300,0)
+            if self.plus_music_button.draw(self.screen):
+                if(self.music_volume_number<10):
+                    self.music_volume_number+=1
+                    new_volume=float(self.music_volume_number/10)
+                    self.sm.Change_music_volume(new_volume)
+            if self.minus_music_button.draw(self.screen):
+                if(self.music_volume_number>0):
+                    self.music_volume_number-=1
+                    new_volume=float(self.music_volume_number/10)
+                    self.sm.Change_music_volume(new_volume)
+            self.draw_text(f"{self.music_volume_number}",self.screen.width/2-50,140)
+            
+            self.draw_text("SFX volume",self.screen.width/2-300,230)
+            if self.plus_sfx_button.draw(self.screen):
+                if(self.sfx_volume_number<10):
+                    self.sfx_volume_number+=1
+                    new_volume=float(self.sfx_volume_number/10)
+                    self.sm.Change_sfx_volume(new_volume)
+            if self.minus_sfx_button.draw(self.screen):
+                if(self.sfx_volume_number>0):
+                    self.sfx_volume_number-=1
+                    new_volume=float(self.sfx_volume_number/10)
+                    self.sm.Change_sfx_volume(new_volume)
+            self.draw_text(f"{self.sfx_volume_number}",self.screen.width/2-50,400)
+
             if self.back_button.draw(self.screen):
                 self.showing_options=False
         
-    def draw_text(self,text,x,y):
-        img=self.font.render(text,True,self.text_colour)
-        self.screen.blit(img,(x,y))
-    
+
 class Button():
     def __init__(self,x,y,image,scale):
         width=image.get_width()
