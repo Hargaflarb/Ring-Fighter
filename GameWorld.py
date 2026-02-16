@@ -10,6 +10,8 @@ from Characters.Enemy import Enemy
 from Environment.Void import Void
 from SoundManager import SoundManager
 from Event import Event
+from Menu import Start_menu
+from Menu import Button
 
 class Game_World:
     def __init__(self)->None:
@@ -17,12 +19,16 @@ class Game_World:
         self.screen=pygame.display.set_mode((1280,720))
         self.running=True
         self.clock=pygame.time.Clock()
-
+        #toggle this if you don't want the main menu showing up
+        self.showing_menu=True
         self._events = {}
 
         self.active_game_objects=[]
         self.game_objects_to_add=[]
         self.game_objects_to_remove=[]
+
+        self.start_menu= Start_menu(self.screen)
+        
 
         player = Player(self, pygame.math.Vector2(640, 360), 0.5)
         self.game_objects_to_add.append(player)
@@ -42,7 +48,7 @@ class Game_World:
         sm.Add_music("spk","The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
         sm.Play_music("spk")
         sm2=SoundManager()
-        sm2.Stop_music()
+        #sm2.Stop_music()
 
 
     @property
@@ -81,9 +87,17 @@ class Game_World:
             self.screen.fill("green")
 
             #add things to draw
-            #self.screen.blit(self.sprite_image,self.sprite.rect)
-            for gameobject in self.active_game_objects:
-                gameobject.Update(delta_time)
+            #basic state, can be removed later
+            if self.showing_menu:
+                #also add menu background here
+                returned_string=self.start_menu.draw_menu()
+                if returned_string=="start":
+                    self.showing_menu=False
+                elif returned_string=="quit":
+                    self.running=False
+            else:
+                for gameobject in self.active_game_objects:
+                    gameobject.Update(delta_time)
             
             #draws to screen
             pygame.display.flip()
