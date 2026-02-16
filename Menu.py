@@ -16,9 +16,12 @@ class Start_menu:
         self.quit_button=Button(self.screen.width/2,450,quit_btn_image,1)
         
     def draw_menu(self):
-        self.start_button.draw(self.screen)
-        self.options_button.draw(self.screen)
-        self.quit_button.draw(self.screen)
+        if self.start_button.draw(self.screen):
+            return "start"
+        if self.options_button.draw(self.screen):
+            print ("pressed options")
+        if self.quit_button.draw(self.screen):
+            return "quit"
         
     def draw_text(self,text,x,y):
         img=self.font.render(text,True,self.text_colour)

@@ -88,7 +88,11 @@ class Game_World:
             #add things to draw
             #basic state, can be removed later
             if self.showing_menu:
-                self.menu.draw_menu()
+                returned_string=self.menu.draw_menu()
+                if returned_string=="start":
+                    self.showing_menu=False
+                elif returned_string=="quit":
+                    self.running=False
             else:
                 for gameobject in self.active_game_objects:
                     gameobject.Update(delta_time)
