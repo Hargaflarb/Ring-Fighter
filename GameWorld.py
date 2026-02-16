@@ -26,7 +26,7 @@ class Game_World:
 
         player = Player(self, pygame.math.Vector2(640, 360), 0.5)
         self.game_objects_to_add.append(player)
-        enemy = Enemy(self, pygame.math.Vector2(800, 360), 0.5)
+        enemy = Enemy(self, pygame.math.Vector2(800, 360), 0.5, "Easy")
         self.game_objects_to_add.append(enemy)
 
         floor = GameObject(self, pygame.math.Vector2(640, 720), 0.5)
