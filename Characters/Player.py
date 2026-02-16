@@ -44,7 +44,7 @@ class Player(GameObject):
 
         self.Add_component(Momentum())
         self.Add_component(Gravity())
-        self.Add_component(Colider((self._sprite_size[0]/2,self._sprite_size[1],self._sprite_size[0]/2,0), 2))
+        self.Add_component(Colider((self._sprite_size[0]/3,self._sprite_size[1],self._sprite_size[0]/3,0), 2))
 
 
     @property
