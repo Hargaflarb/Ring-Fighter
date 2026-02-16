@@ -5,6 +5,7 @@ from Components import Gravity
 from Components import Colider
 from Components import SpriteRenderer
 from Components import Animator
+from Attacks.AttackData import Attack_Data
 from Characters.Player import Player
 from Characters.Enemy import Enemy
 from Environment.Void import Void
@@ -24,6 +25,14 @@ class Game_World:
         self.game_objects_to_add=[]
         self.game_objects_to_remove=[]
 
+        self.attack_types = {}
+        self.attack_types["standard_attack"] = Attack_Data("standard_attack", (0.1,0.2,0.1), (40,20), (-60,-20))
+        self.attack_types["low_attack"] = Attack_Data("low_attack", (0.5,0.2,0.3), (20,10), (-40,-20))
+        self.attack_types["down_attack"] = Attack_Data("down_attack", (0.2,0.1,0.8), (20,10), (-40,-20))
+        self.attack_types["up_attack"] = Attack_Data("up_attack", (0.3,0.2,0.3), (20,10), (-40,-20))
+        #self.attack_types["ranged_attack"] = Attack_Data("attack name", (0.5,0.2,0.5), (20,10), (-40,-20))
+
+
         player = Player(self, pygame.math.Vector2(640, 360), 0.5)
         self.game_objects_to_add.append(player)
         enemy = Enemy(self, pygame.math.Vector2(800, 360), 0.5)
@@ -34,6 +43,7 @@ class Game_World:
         self.game_objects_to_add.append(floor)
 
         self.game_objects_to_add.append(Void(self))
+
 
 
         sm=SoundManager()

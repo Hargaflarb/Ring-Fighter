@@ -64,6 +64,7 @@ class Input_Handler():
         self._last_keypresses = []
         self._player = player
 
+
     @property
     def keybinds(self):
         return self._keybinds

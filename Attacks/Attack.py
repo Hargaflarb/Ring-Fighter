@@ -9,6 +9,7 @@ class Attack(GameObject):
         self._timings_hit = [False, False]
         self.data = attack_data
         self._life_time = 0.0
+        self._character = character # player or enemy
 
 
 
@@ -18,6 +19,7 @@ class Attack(GameObject):
     def Start(self):
         #play sound effect here
         #play windup animation here (for windup time/duration)
+        self._character.is_blocking_input = True
         return super().Start()
 
     def Update(self, delta_time):
@@ -31,9 +33,10 @@ class Attack(GameObject):
             self.Start_hit()
             self._timings_hit[0] = True
         elif (self._life_time >= (self._windup_time + self._hit_time)) & (not self._timings_hit[1]):
-            pass
+            self.Start_cooldown()
+            self._timings_hit[1] = True
         elif self._life_time >= (self._windup_time + self._hit_time + self._cooldown_time):
-            self.game_world.game_objects_to_remove.append(self) # don't do this for ranged
+            self.Stop_Attack()
 
 
     def Start_hit(self):
@@ -48,8 +51,11 @@ class Attack(GameObject):
 
         #removes colider and other components
         for component in self.data.Removed_components():
-            self.Add_component(component)
+            self.Remove_component(component)
 
 
+    def Stop_Attack(self):
+        self._character.is_blocking_input = False
+        self.game_world.game_objects_to_remove.append(self) # don't do this for ranged
 
 

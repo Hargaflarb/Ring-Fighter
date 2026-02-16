@@ -9,6 +9,6 @@ class Crouch_command(Command):
         self._player = player
 
     def Execute(self, is_repeated, delta_time):
-        if not is_repeated:
+        if (not is_repeated) & (not self._player.is_blocking_input):
             self._player.Crouch_toggle()
 
