@@ -26,10 +26,10 @@ class Game_World:
         self.game_objects_to_remove=[]
 
         self.attack_types = {}
-        self.attack_types["standard_attack"] = Attack_Data("standard_attack", (0.1,0.2,0.1), (40,20), (-60,-20))
-        self.attack_types["low_attack"] = Attack_Data("low_attack", (0.5,0.2,0.3), (20,10), (-40,-20))
-        self.attack_types["down_attack"] = Attack_Data("down_attack", (0.2,0.1,0.8), (20,10), (-40,-20))
-        self.attack_types["up_attack"] = Attack_Data("up_attack", (0.3,0.2,0.3), (20,10), (-40,-20))
+        self.attack_types["standard_attack"] = Attack_Data("standard_attack", (0.1,0.2,0.1), (40,20), (-60,-20), (60,0))
+        self.attack_types["low_attack"] = Attack_Data("low_attack", (0.5,0.2,0.3), (20,10), (-40,-20), (210,0))
+        self.attack_types["down_attack"] = Attack_Data("down_attack", (0.2,0.1,0.8), (20,10), (-40,-20), (210,0))
+        self.attack_types["up_attack"] = Attack_Data("up_attack", (0.3,0.2,0.3), (20,10), (-40,-20), (120,100))
         #self.attack_types["ranged_attack"] = Attack_Data("attack name", (0.5,0.2,0.5), (20,10), (-40,-20))
 
 
@@ -108,7 +108,7 @@ class Game_World:
                     col1 = obj1.Get_component("Colider")
                     col2 = self.active_game_objects[j].Get_component("Colider")
                     if (col1 != None) & (col2 != None): # both has coliders
-                        if (col1.Check_collision(col2)): # does colide
+                        if (col1.Check_Touch(col2)): # does colide
                             col1.On_collision(col2)
                             col2.On_collision(col1)
 

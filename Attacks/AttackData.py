@@ -3,18 +3,23 @@ from Components import Momentum
 from Components import SpriteRenderer
 
 class Attack_Data():
-    def __init__(self, name, timings, hitbox, position_offset):
+    def __init__(self, name, timings, hitbox, position_offset, knockback):
         self.name = name
         self._windup_time = timings[0]
         self._hit_time = timings[1]
         self._cooldown_time = timings[2]
         self._hitbox = hitbox # (Width, Height)
         self.position_offset = position_offset
+        self._knockback = knockback
         self._ranged_speed = 300
 
     @property
     def timings(self):
         return (self._windup_time, self._hit_time, self._cooldown_time)
+
+    @property
+    def knockback(self):
+        return self._knockback
 
     def Added_components(self, facing):
         components = []

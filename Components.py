@@ -98,7 +98,7 @@ class Gravity(Component):
         super().__init__()
         self.last_delta_time = 0
         self._gravity = 9.82
-        self._gravity_multiplier = 30
+        self._gravity_multiplier = 50
         
     @property
     def gravity(self):
@@ -120,8 +120,25 @@ class Gravity(Component):
 class Momentum(Component):
     def __init__(self, momentum = (0.0,0.0)):
         super().__init__()
-        self.horizontal_momentum = momentum[0]
-        self.vertical_momentum = momentum[1]
+        self._horizontal_momentum = momentum[0]
+        self._vertical_momentum = momentum[1]
+
+    @property
+    def horizontal_momentum(self):
+        return self._horizontal_momentum
+    @horizontal_momentum.setter
+    def horizontal_momentum(self, value):
+        if abs(value) < 1:
+            value = 0
+        self._horizontal_momentum = value
+    
+    @property
+    def vertical_momentum(self):
+        return self._vertical_momentum
+    @vertical_momentum.setter
+    def vertical_momentum(self, value):
+        self._vertical_momentum = value
+
 
     def Awake(self,game_world):
         pass
@@ -137,9 +154,9 @@ class Momentum(Component):
         return super().Update(delta_time)
     
 
-    def Give_Momentum(self):
-        self.horizontal_momentum = 1
-        self.vertical_momentum = 1
+    def Give_Momentum(self, knockback, facing):
+        self.horizontal_momentum -= knockback[0] * facing
+        self.vertical_momentum -= knockback[1]
 
     
     
@@ -209,19 +226,23 @@ class Colider(Component):
     def On_collision(self, other_colider):
         if (self.colider_type == 2) & (other_colider.colider_type == 1): # hard collision
             #print("hard collision")
-            overlap = self.Overlap(other_colider)
+            if self.Check_collision(other_colider):
+                overlap = self.Overlap(other_colider)
 
-            overlap_width = overlap[0]
-            overlap_height = overlap[1]
+                overlap_width = overlap[0]
+                overlap_height = overlap[1]
 
-            if abs(overlap_width) >= abs(overlap_height):
-                pos = (0.0, overlap_height)
-                self.gameObject.Get_component("Momentum").vertical_momentum = 0
+                if abs(overlap_width) >= abs(overlap_height):
+                    pos = (0.0, overlap_height)
+                    self.gameObject.Get_component("Momentum").vertical_momentum = 0
+                else:
+                    pos = (overlap_width, 0.0)
+                    self.gameObject.Get_component("Momentum").horizontal_momentum = 0
+                    
+                self.gameObject.transform.translate(pos)
             else:
-                pos = (overlap_width, 0.0)
-                self.gameObject.Get_component("Momentum").horizontal_momentum = 0
+                self.gameObject.Get_component("Momentum").horizontal_momentum *= 0.8
 
-            self.gameObject.transform.translate(pos)
 
         # custom collision
         self.gameObject.OnCollision(other_colider.gameObject)        
@@ -232,6 +253,7 @@ class Colider(Component):
     def Start(self):
         pass
     def Update(self, delta_time):
+
         # draw hitboxes
         pygame.draw.rect(self._game_world.Screen, pygame.color.Color(255,0,0), pygame.rect.Rect(self.pos_sized_rect), 1)
         pygame.draw.circle(self._game_world.Screen, pygame.color.Color(255,0,0), self.gameObject.transform.position, 1, 0)

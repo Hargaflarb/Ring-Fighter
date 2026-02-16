@@ -3,13 +3,16 @@ from GameObject import GameObject
 class Attack(GameObject):
     def __init__(self, game_world, character, attack_data):
         t = character.transform
-        position = (t.position[0] + (attack_data.position_offset[0] * t.facing), t.position[1] + attack_data.position_offset[1])
+        self._facing = character.transform.facing
+        position = (t.position[0] + (attack_data.position_offset[0] * self._facing), t.position[1] + attack_data.position_offset[1])
         super().__init__(game_world, position, t.scale)
         self._windup_time, self._hit_time, self._cooldown_time = attack_data.timings
         self._timings_hit = [False, False]
         self.data = attack_data
         self._life_time = 0.0
         self._character = character # player or enemy
+        self._has_hit = False
+
 
 
 
@@ -53,9 +56,14 @@ class Attack(GameObject):
         for component in self.data.Removed_components():
             self.Remove_component(component)
 
-
     def Stop_Attack(self):
         self._character.is_blocking_input = False
         self.game_world.game_objects_to_remove.append(self) # don't do this for ranged
 
 
+    def OnCollision(self, other):
+        # is a player or enemy that is not it's own
+        if (not self._has_hit) & ((other.__class__.__name__ == "Player") | (other.__class__.__name__ == "Enemy")):# & (other != self._character):
+            self._has_hit = True
+            momentum = other.Get_component("Momentum")
+            momentum.Give_Momentum(self.data.knockback, self._facing)
