@@ -61,6 +61,7 @@ class Input_Handler():
     def __init__(self, player):
         super().__init__()
         self._keybinds = {}
+        self._last_keypresses = []
         self._player = player
 
     @property
@@ -79,7 +80,9 @@ class Input_Handler():
         
         for key in self.keybinds.keys():
             if keys[key]:
-                self.keybinds[key].Execute(delta_time)
+                self.keybinds[key].Execute(self._last_keypresses[key], delta_time)
+        
+        self._last_keypresses = keys
 
     def Awake(self,game_world):
         pass

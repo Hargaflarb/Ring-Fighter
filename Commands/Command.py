@@ -5,5 +5,5 @@ class Command(ABC):
         super().__init__()
 
     @abstractmethod
-    def Execute(self):
+    def Execute(self, is_repeated):
         pass

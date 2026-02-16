@@ -8,7 +8,7 @@ class MoveCommand(Command):
         self._direction = direction
         self._speed = speed
 
-    def Execute(self, delta_time):   
+    def Execute(self, is_repeated, delta_time):   
         if self._direction != pygame.math.Vector2(0, 0):
            self._direction.normalize
         change = ((self._direction * self._speed))
