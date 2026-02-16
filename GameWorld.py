@@ -26,7 +26,7 @@ class Game_World:
         self.game_objects_to_add=[]
         self.game_objects_to_remove=[]
 
-        self.menu= Start_menu(self.screen)
+        self.start_menu= Start_menu(self.screen)
         
 
         player = Player(self, pygame.math.Vector2(640, 360), 0.5)
@@ -89,7 +89,7 @@ class Game_World:
             #basic state, can be removed later
             if self.showing_menu:
                 #also add menu background here
-                returned_string=self.menu.draw_menu()
+                returned_string=self.start_menu.draw_menu()
                 if returned_string=="start":
                     self.showing_menu=False
                 elif returned_string=="quit":

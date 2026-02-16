@@ -1,7 +1,13 @@
 import pygame
 from SoundManager import SoundManager
 
-class Start_menu:
+class Start_menu():
+    #singleton code; creates a new instance if none exist, otherwise returns the instance
+    def __new__(cls,screen):
+        if not hasattr(cls,'instance'):
+            cls.instance=super().__new__(cls)
+        return cls.instance
+    
     def __init__(self,screen):
         self.screen=screen
         self.font=pygame.font.SysFont("arialblack",60)
