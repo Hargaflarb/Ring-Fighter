@@ -19,6 +19,7 @@ class Game_World:
         self.screen=pygame.display.set_mode((1280,720))
         self.running=True
         self.clock=pygame.time.Clock()
+        #toggle this if you don't want the main menu showing up
         self.showing_menu=True
         self._events = {}
 
