@@ -73,3 +73,9 @@ class Player(GameObject):
         else: #starts blocking
             self.input_filter.append("block")
         self._blocking = not self._blocking
+
+    def Take_knockback(self, knockback, facing):
+        # play hit animation
+        self.Get_component("Momentum").Give_Momentum(knockback, facing)
+
+

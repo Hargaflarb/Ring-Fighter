@@ -46,9 +46,7 @@ class Attack_Data():
         return components
 
     def Removed_components(self):
-        components = []
+        # components = []
+        # components.append("Colider")
 
-        if self.name != "ranged_attack": # this if-statement isn't really needed
-            components.append("Colider")
-
-        return components
+        return ["Colider"]

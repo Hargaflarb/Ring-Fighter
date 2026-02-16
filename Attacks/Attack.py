@@ -66,10 +66,9 @@ class Attack(GameObject):
 
     def OnCollision(self, other):
         # is a player or enemy that is not it's own
-        if (not self._has_hit) & ((other.__class__.__name__ == "Player") | (other.__class__.__name__ == "Enemy")) & (other != self._character):
+        if (not self._has_hit) & ((other.__class__.__name__ == "Player") | (other.__class__.__name__ == "Enemy")):# & (other != self._character):
             self._has_hit = True
             if (not other.blocking) | self.data.ignores_block:
-                momentum = other.Get_component("Momentum")
-                momentum.Give_Momentum(self.data.knockback, self._facing)
+                other.Take_knockback(self.data.knockback, self._facing)
             return True
         return False

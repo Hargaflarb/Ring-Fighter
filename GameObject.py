@@ -25,6 +25,9 @@ class GameObject:
         component.Start()
         return component
     
+    def Remove_all_components(self):
+        self.components.clear()
+
     def Remove_component(self, component_name):
         if component_name in self.components.keys():
             del self.components[component_name]
