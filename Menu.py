@@ -62,7 +62,7 @@ class Start_menu():
                     self.music_volume_number-=1
                     new_volume=float(self.music_volume_number/10)
                     self.sm.Change_music_volume(new_volume)
-            self.draw_text(f"{self.music_volume_number}",self.screen.width/2-50,140)
+            self.draw_text(f"{self.music_volume_number}",self.screen.width/2-50,80)
             
             self.draw_text("SFX volume",self.screen.width/2-300,230)
             if self.plus_sfx_button.draw(self.screen):
@@ -75,7 +75,7 @@ class Start_menu():
                     self.sfx_volume_number-=1
                     new_volume=float(self.sfx_volume_number/10)
                     self.sm.Change_sfx_volume(new_volume)
-            self.draw_text(f"{self.sfx_volume_number}",self.screen.width/2-50,400)
+            self.draw_text(f"{self.sfx_volume_number}",self.screen.width/2-50,310)
 
             if self.back_button.draw(self.screen):
                 self.showing_options=False
