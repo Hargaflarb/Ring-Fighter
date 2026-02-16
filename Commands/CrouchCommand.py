@@ -8,7 +8,11 @@ class Crouch_command(Command):
         super().__init__()
         self._player = player
 
+    @property
+    def blocking_filters(self):
+        return ["block", "attack"]
+
     def Execute(self, is_repeated, delta_time):
-        if (not is_repeated) & (not self._player.is_blocking_input):
+        if (not is_repeated) & self.Pass_filter(self._player.input_filter):
             self._player.Crouch_toggle()
 

@@ -11,9 +11,12 @@ class Attack_command(Command):
         self._crouched_attack = crouched_attack
         self._attack_data = attack_data
 
+    @property
+    def blocking_filters(self):
+        return ["block", "attack"]
 
     def Execute(self, is_repeated, delta_time):
-        if (not is_repeated) & (not self._player.is_blocking_input) & (self._player.crouching == self._crouched_attack):
+        if (not is_repeated) & (self.Pass_filter(self._player.input_filter)) & (self._player.crouching == self._crouched_attack):
             the_attack = Attack(self._player.game_world, self._player, self._attack_data)
             self._player.game_world.game_objects_to_add.append(the_attack)
 

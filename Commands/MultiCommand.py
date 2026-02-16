@@ -7,6 +7,10 @@ class Multi_command(Command):
         self._second_command = second_command
         self._condition = condition_call # runs first command if true, runs second command if false
     
+    @property
+    def blocking_filters(self):
+        return []
+
     def Execute(self, is_repeated, delta_time):
         if self._condition():
             self._first_command.Execute(is_repeated, delta_time)

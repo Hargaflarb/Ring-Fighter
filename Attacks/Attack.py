@@ -22,7 +22,7 @@ class Attack(GameObject):
     def Start(self):
         #play sound effect here
         #play windup animation here (for windup time/duration)
-        self._character.is_blocking_input = True
+        self._character.input_filter.append("attack")
         return super().Start()
 
     def Update(self, delta_time):
@@ -57,13 +57,14 @@ class Attack(GameObject):
             self.Remove_component(component)
 
     def Stop_Attack(self):
-        self._character.is_blocking_input = False
+        self._character.input_filter.remove("attack")
         self.game_world.game_objects_to_remove.append(self) # don't do this for ranged
 
 
     def OnCollision(self, other):
         # is a player or enemy that is not it's own
-        if (not self._has_hit) & ((other.__class__.__name__ == "Player") | (other.__class__.__name__ == "Enemy")):# & (other != self._character):
+        if (not self._has_hit) & ((other.__class__.__name__ == "Player") | (other.__class__.__name__ == "Enemy")) & (other != self._character):
             self._has_hit = True
-            momentum = other.Get_component("Momentum")
-            momentum.Give_Momentum(self.data.knockback, self._facing)
+            if (not other.blocking) | self.data.ignores_block:
+                momentum = other.Get_component("Momentum")
+                momentum.Give_Momentum(self.data.knockback, self._facing)
