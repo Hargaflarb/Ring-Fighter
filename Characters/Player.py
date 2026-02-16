@@ -41,6 +41,7 @@ class Player(GameObject):
         input_handler.Add_Command(pygame.K_j, Multi_command(low_attack, standard_attack, lambda: self.crouching))
         input_handler.Add_Command(pygame.K_k, Attack_command(self, self.transform.facing, game_world.attack_types["down_attack"], False))
         input_handler.Add_Command(pygame.K_l, Attack_command(self, self.transform.facing, game_world.attack_types["up_attack"], False))
+        input_handler.Add_Command(pygame.K_h, Attack_command(self, self.transform.facing, game_world.attack_types["ranged_attack"], False))
 
         self.Add_component(Momentum())
         self.Add_component(Gravity())

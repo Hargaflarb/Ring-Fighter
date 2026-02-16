@@ -17,6 +17,6 @@ class Attack_command(Command):
 
     def Execute(self, is_repeated, delta_time):
         if (not is_repeated) & (self.Pass_filter(self._player.input_filter)) & (self._player.crouching == self._crouched_attack):
-            the_attack = Attack(self._player.game_world, self._player, self._attack_data)
+            the_attack = self._attack_data.Make_attack_object(self._player.game_world, self._player)
             self._player.game_world.game_objects_to_add.append(the_attack)
 
