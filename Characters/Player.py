@@ -3,7 +3,7 @@ from Characters.Character import Character
 import Components
 import pygame
 from abc import ABC
-from Commands.move_command import MoveCommand
+from Commands.MoveCommand import MoveCommand
 from Commands.AttackCommand import Attack_command
 from Commands.CrouchCommand import Crouch_command
 from Commands.BlockCommand import Block_command
