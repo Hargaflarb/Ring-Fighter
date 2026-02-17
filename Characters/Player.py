@@ -3,6 +3,10 @@ import Components
 import pygame
 from abc import ABC
 from Commands.MoveCommand import MoveCommand
+from Commands.AttackCommand import Attack_command
+from Commands.CrouchCommand import Crouch_command
+from Commands.BlockCommand import Block_command
+from Commands.MultiCommand import Multi_command
 from Components import Momentum
 from Components import Gravity
 from Components import Colider
