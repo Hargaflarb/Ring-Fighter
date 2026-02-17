@@ -2,7 +2,7 @@ from GameObject import GameObject
 import Components
 import pygame
 from abc import ABC
-from Commands.Move_Command import MoveCommand
+from Commands.MoveCommand import MoveCommand
 from Components import Momentum
 from Components import Gravity
 from Components import Colider
