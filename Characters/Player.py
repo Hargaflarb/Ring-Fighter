@@ -1,4 +1,5 @@
 from GameObject import GameObject
+from Characters.Character import Character
 import Components
 import pygame
 from abc import ABC
@@ -10,18 +11,17 @@ from Commands.MultiCommand import Multi_command
 from Components import Momentum
 from Components import Gravity
 from Components import Colider
+from Components import Input_Handler
 
 
-class Player(GameObject):
+class Player(Character):
     def __init__(self, game_world, position, scale):
         super().__init__(game_world, position, scale)
 
-        self._crouching = False
-        self._blocking = False
         self.input_filter = []
 
         sr = self.Add_component(Components.SpriteRenderer("temp playercharacter.png"))
-        input_handler = self.Add_component(Components.Input_Handler(self))
+        input_handler = self.Add_component(Input_Handler(self))
         self._screen_size = pygame.math.Vector2(game_world.Screen.get_width(), game_world.screen.get_height())
         self._sprite_size = pygame.math.Vector2(sr.sprite_image.get_width(), sr.sprite_image.get_height())
         self.game_world = game_world
@@ -34,7 +34,7 @@ class Player(GameObject):
         # other
         input_handler.Add_Command(pygame.K_s, Crouch_command(self))
         input_handler.Add_Command(pygame.K_SPACE, Block_command(self))
-
+        
         # attacks
         standard_attack = Attack_command(self, self.transform.facing, game_world.attack_types["standard_attack"], False)
         low_attack = Attack_command(self, self.transform.facing, game_world.attack_types["low_attack"], True)
@@ -48,34 +48,6 @@ class Player(GameObject):
         self.Add_component(Colider((self._sprite_size[0]/3,self._sprite_size[1],self._sprite_size[0]/3,0), 2))
 
 
-    @property
-    def crouching(self):
-        return self._crouching
-    
-    @property
-    def blocking(self):
-        return self._blocking
 
-    def Crouch_toggle(self):
-        old_rect = self.Get_component("Colider").rect
-        if self._crouching: #stops crouching
-            self.Get_component("Colider").rect = (old_rect[0], old_rect[1]*2, old_rect[2], old_rect[3])
-            self.input_filter.remove("crouch")
-        else: #starts crouching
-            self.Get_component("Colider").rect = (old_rect[0], old_rect[1]/2, old_rect[2], old_rect[3])
-            self.input_filter.append("crouch")
-        self._crouching = not self._crouching
- 
-
-    def Block_toggle(self):
-        if self._blocking: #stops blocking
-            self.input_filter.remove("block")
-        else: #starts blocking
-            self.input_filter.append("block")
-        self._blocking = not self._blocking
-
-    def Take_knockback(self, knockback, facing):
-        # play hit animation
-        self.Get_component("Momentum").Give_Momentum(knockback, facing)
 
 
