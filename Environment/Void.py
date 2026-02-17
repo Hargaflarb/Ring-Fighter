@@ -20,16 +20,13 @@ class Void(GameObject):
             self.game_world.game_objects_to_remove.append(other)
 
             # calls the methode that trigger the event
-            self.trigger_round_over((2,))
-        elif other.__class__.__name__ == "Enemy":
-            # calls the methode that trigger the event
-            self.trigger_round_over((1,))
+            self.trigger_round_over(("it worked",))
             
             
 
     def Awake(self):
         # makes a lambda expression that is ran when the event is triggered (if you need multiple lines; use a methode)
-        fn = lambda args: self.game_world.game_manager.End_round(args[0])
+        fn = lambda args: self.game_world.game_objects_to_add.append(Player(self.game_world, pygame.math.Vector2(640, 360), 0.5))
 
         # retrieves the event from the game world
         event = self.game_world.Get_event("Round_Over")

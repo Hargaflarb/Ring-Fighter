@@ -25,9 +25,6 @@ class GameObject:
         component.Start()
         return component
     
-    def Remove_all_components(self):
-        self.components.clear()
-
     def Remove_component(self, component_name):
         if component_name in self.components.keys():
             del self.components[component_name]
@@ -44,8 +41,7 @@ class GameObject:
 
     
     def Awake(self):
-        for component in self.components.values():
-            component.Awake(self.game_world)
+        pass
             
     def Start(self):
         for component in self.components.values():

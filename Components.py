@@ -27,11 +27,10 @@ class Component(ABC):
 
 class Transform(Component):
 
-    def __init__(self,position,scale, facing = 1):
+    def __init__(self,position,scale):
         super().__init__()
         self._position=position
         self._scale=scale
-        self.facing = facing
 
     @property
     def position(self):
@@ -61,9 +60,7 @@ class Input_Handler():
     def __init__(self, player):
         super().__init__()
         self._keybinds = {}
-        self._last_keypresses = []
         self._player = player
-
 
     @property
     def keybinds(self):
@@ -81,12 +78,10 @@ class Input_Handler():
         
         for key in self.keybinds.keys():
             if keys[key]:
-                self.keybinds[key].Execute(self._last_keypresses[key], delta_time)
-        
-        self._last_keypresses = keys
+                self.keybinds[key].Execute(delta_time)
 
     def Awake(self,game_world):
-        self._last_keypresses = pygame.key.get_pressed()
+        pass
         
     def Start(self):
         pass
@@ -98,7 +93,7 @@ class Gravity(Component):
         super().__init__()
         self.last_delta_time = 0
         self._gravity = 9.82
-        self._gravity_multiplier = 50
+        self._gravity_multiplier = 20
         
     @property
     def gravity(self):
@@ -118,27 +113,10 @@ class Gravity(Component):
 
 
 class Momentum(Component):
-    def __init__(self, momentum = (0.0,0.0)):
+    def __init__(self):
         super().__init__()
-        self._horizontal_momentum = momentum[0]
-        self._vertical_momentum = momentum[1]
-
-    @property
-    def horizontal_momentum(self):
-        return self._horizontal_momentum
-    @horizontal_momentum.setter
-    def horizontal_momentum(self, value):
-        if abs(value) < 1:
-            value = 0
-        self._horizontal_momentum = value
-    
-    @property
-    def vertical_momentum(self):
-        return self._vertical_momentum
-    @vertical_momentum.setter
-    def vertical_momentum(self, value):
-        self._vertical_momentum = value
-
+        self.vertical_momentum = 0.0
+        self.horizontal_momentum = 0.0
 
     def Awake(self,game_world):
         pass
@@ -154,9 +132,9 @@ class Momentum(Component):
         return super().Update(delta_time)
     
 
-    def Give_Momentum(self, knockback, facing):
-        self.horizontal_momentum -= knockback[0] * facing
-        self.vertical_momentum -= knockback[1]
+    def Give_Momentum(self):
+        self.vertical_momentum = 1
+        self.horizontal_momentum = 1
 
     
     
@@ -226,23 +204,19 @@ class Colider(Component):
     def On_collision(self, other_colider):
         if (self.colider_type == 2) & (other_colider.colider_type == 1): # hard collision
             #print("hard collision")
-            if self.Check_collision(other_colider):
-                overlap = self.Overlap(other_colider)
+            overlap = self.Overlap(other_colider)
 
-                overlap_width = overlap[0]
-                overlap_height = overlap[1]
+            overlap_width = overlap[0]
+            overlap_height = overlap[1]
 
-                if abs(overlap_width) >= abs(overlap_height):
-                    pos = (0.0, overlap_height)
-                    self.gameObject.Get_component("Momentum").vertical_momentum = 0
-                else:
-                    pos = (overlap_width, 0.0)
-                    self.gameObject.Get_component("Momentum").horizontal_momentum = 0
-                    
-                self.gameObject.transform.translate(pos)
+            if abs(overlap_width) >= abs(overlap_height):
+                pos = (0.0, overlap_height)
+                self.gameObject.Get_component("Momentum").vertical_momentum = 0
             else:
-                self.gameObject.Get_component("Momentum").horizontal_momentum *= 0.8
+                pos = (overlap_width, 0.0)
+                self.gameObject.Get_component("Momentum").horizontal_momentum = 0
 
+            self.gameObject.transform.translate(pos)
 
         # custom collision
         self.gameObject.OnCollision(other_colider.gameObject)        
@@ -253,7 +227,6 @@ class Colider(Component):
     def Start(self):
         pass
     def Update(self, delta_time):
-
         # draw hitboxes
         pygame.draw.rect(self._game_world.Screen, pygame.color.Color(255,0,0), pygame.rect.Rect(self.pos_sized_rect), 1)
         pygame.draw.circle(self._game_world.Screen, pygame.color.Color(255,0,0), self.gameObject.transform.position, 1, 0)
