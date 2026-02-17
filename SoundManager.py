@@ -6,12 +6,15 @@ class SoundManager():
         if not hasattr(cls,'instance'):
             cls.instance=super().__new__(cls)
         return cls.instance
+    
     #code below needs no change to work with singleton
     def __init__(self):
         self._sound_effects={}
         self._music={}
-        self._current_music=None
-
+        #self._current_music=None
+        self._music_volume=1
+        self._sfx_volume=1
+    
     def Add_sfx(self,sfx_name,sfx_file,volume):
         #!make sure the asset is in the correct sub-folder!
         sfx=pygame.mixer.Sound(f"assets\\Audio\\{sfx_file}")
@@ -30,10 +33,22 @@ class SoundManager():
         #!make sure the asset is in the correct sub-folder!
         pygame.mixer.music.load((f"assets\\Audio\\{self._music[music_name].file_name}"))
         pygame.mixer.music.play()
-        pygame.mixer.music.set_volume(self._music[music_name].volume)
+        self._current_music=self._music[music_name]
+        pygame.mixer.music.set_volume(self._music[music_name].volume*self._music_volume)
 
     def Stop_music(self):
         pygame.mixer.music.stop()
+
+    def Change_music_volume(self,value):
+        self._music_volume=value
+        pygame.mixer.music.set_volume(self._current_music.volume*value)
+
+    def Change_sfx_volume(self,value):
+        for key,sound in self._sound_effects:
+            sound.volume=sound.volume/self._sfx_volume
+        self._sfx_volume=value
+        for key,sound in self._sound_effects:
+            sound.volume=sound.volume*self._sfx_volume
 
 class Audio():
     #most fields should not be editable after the class is initialised

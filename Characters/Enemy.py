@@ -1,4 +1,5 @@
 from GameObject import GameObject
+from Characters.Character import Character
 import Components
 import pygame
 from AI.FSM import FSM
@@ -6,9 +7,14 @@ from AI.Idle_State import Idle_State
 from AI.Attack_State import Attack_State
 from AI.Null_State import Null_State
 from AI.AI_Conditions import AI_Conditions
+from Components import Momentum
+from Components import Gravity
+from Components import Colider
+import pygame
 
-class Enemy(GameObject):
-    def __init__(self, game_world, position, scale, difficulty, opponent):
+
+class Enemy(Character):
+    def __init__(self, game_world, position, scale):
         super().__init__(game_world, position, scale)
 
         self._opponent = opponent
@@ -37,4 +43,8 @@ class Enemy(GameObject):
            direction.normalize
         change = ((direction * self.speed))
         self.transform.translate(change*delta_time)
+
+        self.Add_component(Momentum())
+        self.Add_component(Gravity())
+        self.Add_component(Colider((self._sprite_size[0]/3,self._sprite_size[1],self._sprite_size[0]/3,0), 2))
 

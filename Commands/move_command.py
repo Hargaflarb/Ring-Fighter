@@ -8,10 +8,15 @@ class MoveCommand(Command):
         self._direction = direction
         self._speed = speed
 
-    def Execute(self, delta_time):   
-        if self._direction != pygame.math.Vector2(0, 0):
-           self._direction.normalize
-        change = ((self._direction * self._speed))
-        self._player.transform.translate(change*delta_time)
+    @property
+    def blocking_filters(self):
+        return ["block", "crouch", "attack"]
+
+    def Execute(self, is_repeated, delta_time):
+        if self.Pass_filter(self._player.input_filter):
+            if self._direction != pygame.math.Vector2(0, 0):
+                self._direction.normalize
+            change = ((self._direction * self._speed))
+            self._player.transform.translate(change*delta_time)
         
     
