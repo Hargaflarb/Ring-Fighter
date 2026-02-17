@@ -86,7 +86,7 @@ class Input_Handler():
         self._last_keypresses = keys
 
     def Awake(self,game_world):
-        pass
+        self._last_keypresses = pygame.key.get_pressed()
         
     def Start(self):
         pass

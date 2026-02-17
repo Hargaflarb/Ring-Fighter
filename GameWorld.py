@@ -13,6 +13,7 @@ from SoundManager import SoundManager
 from Event import Event
 from Menu import Start_menu
 from Menu import Button
+from GameManager import Game_manager
 
 class Game_World:
     def __init__(self)->None:
@@ -20,8 +21,9 @@ class Game_World:
         self.screen=pygame.display.set_mode((1280,720))
         self.running=True
         self.clock=pygame.time.Clock()
+        self.game_manager = Game_manager(self)
         #toggle this if you don't want the main menu showing up
-        self.showing_menu=True
+        self.showing_menu=False
         self._events = {}
 
         self.active_game_objects=[]
@@ -34,36 +36,16 @@ class Game_World:
         self.attack_types["down_attack"] = Attack_Data("down_attack", (0.2,0.1,0.8), (30,50), (-50,-20), (210,0), False)
         self.attack_types["up_attack"] = Attack_Data("up_attack", (0.3,0.2,0.3), (40,70), (-80,-65), (120,100), False)
         self.attack_types["ranged_attack"] = Attack_Data("ranged_attack", (0.7,0.0,0.8), (30,30), (-80,-70), (60,0), False)
-
-        self.start_menu= Start_menu(self.screen)
         
-
-        player = Player(self, pygame.math.Vector2(640, 360), 0.5)
-        self.game_objects_to_add.append(player)
-        enemy = Enemy(self, pygame.math.Vector2(800, 360), 0.5)
-        self.game_objects_to_add.append(enemy)
-
-        floor = GameObject(self, pygame.math.Vector2(640, 720), 0.5)
-        floor.Add_component(Colider((500, 300, 500, 0), 1))
-        self.game_objects_to_add.append(floor)
-
-        wall = GameObject(self, pygame.math.Vector2(0, 720), 0.5)
-        wall.Add_component(Colider((10, 720, 10, 0), 1))
-        self.game_objects_to_add.append(wall)
-
-        wall = GameObject(self, pygame.math.Vector2(1280, 720), 0.5)
-        wall.Add_component(Colider((10, 720, 10, 0), 1))
-        self.game_objects_to_add.append(wall)
-
-        self.game_objects_to_add.append(Void(self))
-
+        
+        self.start_menu= Start_menu(self.screen)
 
 
         sm=SoundManager()
         sm.Add_sfx("Ding","ding-36029.mp3",0.5)
         #sm.Play_sfx("Ding")
         sm.Add_music("spk","The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
-        sm.Play_music("spk")
+        # sm.Play_music("spk")
         sm2=SoundManager()
         #sm2.Stop_music()
 
@@ -73,6 +55,7 @@ class Game_World:
             return self.screen
             
     def Awake(self):
+        self.game_manager.Start_game()
         for gameobject in self.active_game_objects:
             gameobject.Awake()
     def Start(self):
@@ -115,6 +98,8 @@ class Game_World:
             else:
                 for gameobject in self.active_game_objects:
                     gameobject.Update(delta_time)
+                self.draw_text(self.game_manager.Get_rounds_won_string(),(0,0,0), pygame.font.SysFont("arialblack",60), 640, 100)
+            
             
             #draws to screen
             pygame.display.flip()
@@ -132,6 +117,17 @@ class Game_World:
                         if (col1.Check_Touch(col2)): # does colide
                             col1.On_collision(col2)
                             col2.On_collision(col1)
+
+    # don't use this methode to restart the game
+    # instead, use the game managers "start game"
+    def Restart_game(self):
+        for object in self.active_game_objects:
+            self.game_objects_to_remove.append(object)
+
+    def draw_text(self, text, color, font, x, y):
+        img = font.render(text,True,color)
+        self.screen.blit(img,(x-(img.width/2),y))
+
 
     def Make_event(self, name):
         new_event = Event()
