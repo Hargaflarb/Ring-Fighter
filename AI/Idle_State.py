@@ -1,5 +1,7 @@
 from AI.State import State
 import pygame
+from AI.FSM import FSM
+from AI.AI_Conditions import AI_Conditions
 
 class Idle_State(State):
     def __init__(self, obj, opponent):
@@ -7,10 +9,12 @@ class Idle_State(State):
         self._opponent = opponent
         self._obj = obj
 
-    def Execute(self):
-        self.obj.Move(pygame.math.Vector2(-1, 0))
+    def Execute(self, delta_time):
+        self._obj.Move(pygame.math.Vector2(-1, 0), delta_time)
 
-        distance = self._obj.transform.position.x - self._opponent.transform.position.x
+        distance = self._obj.transform.position[0] - self._opponent.transform.position[0]
+        if distance <= 100:
+            self._obj.fsm.Set_Condition(AI_Conditions.Attack)
      
         return super().Execute()
     
@@ -18,6 +22,5 @@ class Idle_State(State):
         return super().Exit()
     
     def Enter(self):
-        print("Idle")
         return super().Enter()
 
