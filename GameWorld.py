@@ -138,8 +138,8 @@ class Game_World:
         sm.Add_sfx("EmmaSA","Emma\\emma standard attack.mp3",0.5)
         sm.Add_sfx("EmmaR","Emma\\emma ranged.mp3",0.5)
         sm.Add_sfx("EmmaF","Emma\\emma fall.mp3",0.5)
-        sm.Add_sfx("EmmaH","Emma\\emma hit 1.mp3",0.5)
-        #sm.Add_sfx("EmmaH","Emma\\emma hit 2.mp3",0.5)
+        sm.Add_sfx("EmmaH1","Emma\\emma hit 1.mp3",0.5)
+        sm.Add_sfx("EmmaH2","Emma\\emma hit 2.mp3",0.5)
         sm.Add_sfx("EmmaT1","Emma\\emma taunt 1.mp3",0.5)
         sm.Add_sfx("EmmaT2","Emma\\emma taunt 2.mp3",0.5)
 
@@ -149,8 +149,8 @@ class Game_World:
         sm.Add_sfx("MaltheSA","Malthe\\StandardAttack8k16.mp3",0.5)
         sm.Add_sfx("MaltheR","Malthe\\Ranged8k24.mp3",0.5)
         sm.Add_sfx("MaltheF","Malthe\\Fall8k16.mp3",0.5)
-        sm.Add_sfx("MaltheH","Malthe\\Hit8k16.mp3",0.5)
-        #sm.Add_sfx("MaltheH","Malthe\\Hit2nd8k16.mp3",0.5)
+        sm.Add_sfx("MaltheH1","Malthe\\Hit8k16.mp3",0.5)
+        sm.Add_sfx("MaltheH2","Malthe\\Hit2nd8k16.mp3",0.5)
         sm.Add_sfx("MaltheT1","Malthe\\Taunt8k16.mp3",0.5)
         sm.Add_sfx("MaltheT2","Malthe\\Taunt2nd8k16.mp3",0.5)
 

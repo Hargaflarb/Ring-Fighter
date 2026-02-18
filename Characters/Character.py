@@ -10,7 +10,7 @@ class Character(GameObject):
         self._character_name = character_name
         self._sound_pack = Character_sound_pack(self._character_name)
         self._time_since_action = 0 # used for taunt
-        self._taunt_wait_time = 5
+        self._taunt_wait_time = 7
 
 
     @property

@@ -40,7 +40,8 @@ class Character_sound_pack():
         self._sm.Play_sfx(f"{self._character_name}F")
 
     def Play_Hit(self):
-        self._sm.Play_sfx(f"{self._character_name}H")
+        num = self._random.randint(1,2)
+        self._sm.Play_sfx(f"{self._character_name}H{num}")
 
     def Play_Taunt(self):
         num = self._random.randint(1,2)
