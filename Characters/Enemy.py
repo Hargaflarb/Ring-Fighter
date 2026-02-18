@@ -4,14 +4,20 @@ import Components
 from Components import Momentum
 from Components import Gravity
 from Components import Colider
+from AI.FSM import FSM
+from AI.Null_State import Null_State
+from AI.Idle_State import Idle_State
+from AI.Attack_State import Attack_State
+from AI.AI_Conditions import AI_Conditions
 import pygame
 
 
 class Enemy(Character):
-    def __init__(self, game_world, position, scale, character_name):
+    def __init__(self, game_world, position, scale, opponent, character_name):
         super().__init__(game_world, position, scale, character_name)
 
-        speed = 50
+        self._speed = 50
+        self._opponent = opponent
         sr = self.Add_component(Components.SpriteRenderer("temp playercharacter.png"))
         self._sprite_size = pygame.math.Vector2(sr.sprite_image.get_width(), sr.sprite_image.get_height())
 
@@ -21,3 +27,15 @@ class Enemy(Character):
         self.Add_component(Gravity())
         self.Add_component(Colider((self._sprite_size[0]/3,self._sprite_size[1],self._sprite_size[0]/3,0), 2))
 
+        self.fsm = self.Add_component(FSM(Null_State(self, self._opponent), self))
+
+        self.fsm.Add_Transition(type(Null_State(self, self._opponent)), AI_Conditions.Idle, Idle_State(self, self._opponent))
+        self.fsm.Add_Transition(type(Idle_State(self, self._opponent)), AI_Conditions.Attack, Attack_State(self, self._opponent))
+        self.fsm.Add_Transition(type(Attack_State(self, self._opponent)), AI_Conditions.Idle, Idle_State(self, self._opponent))
+        
+
+    def Move(self, direction, delta_time):
+        if direction != pygame.math.Vector2(0, 0):
+            direction.normalize
+        change = ((direction * self._speed))
+        self.transform.translate(change*delta_time)

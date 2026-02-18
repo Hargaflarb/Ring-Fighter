@@ -16,7 +16,7 @@ class Match_data():
         characters = []
 
         characters.append(Player(self._game_world, pygame.math.Vector2(480, 360), 0.5, self._player_type))
-        characters.append(Enemy(self._game_world, pygame.math.Vector2(800, 360), 0.5, self._enemy_type))
+        characters.append(Enemy(self._game_world, pygame.math.Vector2(800, 360), 0.5, characters[0], self._enemy_type))
 
         return characters
 
