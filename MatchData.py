@@ -23,7 +23,7 @@ class Match_data():
 
     def Get_map_spritesrenderes(self):
         sprite_renderers = []
-        sprite_renderers.append(SpriteRenderer("temp playercharacter.png"))
+        sprite_renderers.append(SpriteRenderer("Maps\\mapice.png"))
         sprite_renderers.append(SpriteRenderer("temp playercharacter.png"))
         
         return sprite_renderers

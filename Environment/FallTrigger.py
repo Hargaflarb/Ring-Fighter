@@ -7,7 +7,7 @@ from Components import Colider
 
 class Fall_trigger(GameObject):
     def __init__(self, game_world):
-        super().__init__(game_world, pygame.math.Vector2(640, 480), 1)
+        super().__init__(game_world, pygame.math.Vector2(640, 580), 1)
         self.Add_component(Colider((1000,50,1000,0), 3))
         self._triggered_characters = []
 

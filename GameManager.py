@@ -17,7 +17,7 @@ class Game_manager():
 
         self._current_match = -1
         self._match_datas = []
-        self._match_datas.append(Match_data(self._game_world, "some type", "Malthe","Emma"))
+        self._match_datas.append(Match_data(self._game_world, "some type", "Echo","Emma"))
         self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
         self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
 
@@ -63,14 +63,14 @@ class Game_manager():
     def Set_up_arena(self):
         sprite_renderers = self._match_datas[self._current_match].Get_map_spritesrenderes()
         
-        floor = GameObject(self._game_world, pygame.math.Vector2(640, 720), 1)
-        floor.Add_component(Colider((500, 300, 500, 0), 1))
-        floor.Add_component(sprite_renderers[0])
-        self._game_world.game_objects_to_add.append(floor)
-
         background = GameObject(self._game_world, pygame.math.Vector2(640, 720), 1)
         background.Add_component(sprite_renderers[1])
         self._game_world.game_objects_to_add.append(background)
+
+        floor = GameObject(self._game_world, pygame.math.Vector2(625, 720), 1)
+        floor.Add_component(Colider((410, 200, 440, 0), 1))
+        floor.Add_component(sprite_renderers[0])
+        self._game_world.game_objects_to_add.append(floor)
 
         wall = GameObject(self._game_world, pygame.math.Vector2(0, 720), 1)
         wall.Add_component(Colider((10, 720, 10, 0), 1))
