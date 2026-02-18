@@ -12,7 +12,7 @@ from Environment.Void import Void
 from SoundManager import SoundManager
 from Event import Event
 from Menu import Start_menu
-from Menu import Button
+from Menu import End_menu
 
 class Game_World:
     def __init__(self)->None:
@@ -20,8 +20,9 @@ class Game_World:
         self.screen=pygame.display.set_mode((1280,720))
         self.running=True
         self.clock=pygame.time.Clock()
-        #toggle this if you don't want the main menu showing up
+        #toggle this if you do/ don't want the main menu showing up
         self.showing_menu=True
+        self.game_over=False
         self._events = {}
 
         self.active_game_objects=[]
@@ -36,7 +37,7 @@ class Game_World:
         self.attack_types["ranged_attack"] = Attack_Data("ranged_attack", (0.7,0.0,0.8), (30,30), (-80,-70), (60,0), False)
 
         self.start_menu= Start_menu(self.screen)
-        
+        self.end_menu=End_menu(self.screen)
 
         player = Player(self, pygame.math.Vector2(640, 360), 0.5)
         self.game_objects_to_add.append(player)
@@ -71,6 +72,10 @@ class Game_World:
     @property
     def Screen(self):
             return self.screen
+    
+    def Reset_Game(self):
+        #put new game/reset code here
+        pass
             
     def Awake(self):
         for gameobject in self.active_game_objects:
@@ -110,8 +115,17 @@ class Game_World:
                 returned_string=self.start_menu.draw_menu()
                 if returned_string=="start":
                     self.showing_menu=False
+                    self.Reset_Game()
                 elif returned_string=="quit":
                     self.running=False
+            elif self.game_over:
+                returned_string=self.end_menu.draw_menu()
+                if returned_string=="main_menu":
+                    self.game_over=False
+                    self.showing_menu=True
+                elif returned_string=="restart":
+                    self.game_over=False
+                    self.Reset_Game()
             else:
                 for gameobject in self.active_game_objects:
                     gameobject.Update(delta_time)
@@ -128,7 +142,7 @@ class Game_World:
             for j in range(i + 1, len(self.active_game_objects)):
                     col1 = obj1.Get_component("Colider")
                     col2 = self.active_game_objects[j].Get_component("Colider")
-                    if (col1 != None) & (col2 != None): # both has coliders
+                    if (col1 != None) & (col2 != None): # both have coliders
                         if (col1.Check_Touch(col2)): # does colide
                             col1.On_collision(col2)
                             col2.On_collision(col1)

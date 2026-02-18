@@ -79,6 +79,39 @@ class Start_menu():
 
             if self.back_button.draw(self.screen):
                 self.showing_options=False
+
+class End_menu():
+    #singleton code; creates a new instance if none exist, otherwise returns the instance
+    def __new__(cls,screen):
+        if not hasattr(cls,'instance'):
+            cls.instance=super().__new__(cls)
+        return cls.instance
+    
+    def __init__(self,screen):
+        self.screen=screen
+        self.font=pygame.font.SysFont("arialblack",60)
+        self.text_colour=(0,0,0)
+        self.music_volume_number=10
+        self.sfx_volume_number=10
+        self.create_menu()
+        self.sm=SoundManager()
+
+    def create_menu(self):
+        restart_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\restartbtn.png")
+        self.restart_button=Button(300,self.screen.height-100,restart_btn_image,1)
+        menu_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\mainmenubtn.png")
+        self.menu_button=Button(self.screen.width-300,self.screen.height-100,menu_btn_image,1)
+        
+    def draw_text(self,text,x,y):
+        img=self.font.render(text,True,self.text_colour)
+        self.screen.blit(img,(x,y))
+
+    def draw_menu(self):
+            self.draw_text("Score goes here",self.screen.width/2-300,230)
+            if self.restart_button.draw(self.screen):
+                return "restart"
+            if self.menu_button.draw(self.screen):
+                return "main_menu"
         
 
 class Button():
