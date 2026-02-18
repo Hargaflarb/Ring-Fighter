@@ -47,7 +47,7 @@ class Attack(GameObject):
 
     def Start_hit(self):
         #play hit animation
-
+        #
         #adds colider and other components
         for component in self.data.Added_components(self._facing):
             self.Add_component(component)

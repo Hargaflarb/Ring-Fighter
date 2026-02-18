@@ -13,6 +13,8 @@ from SoundManager import SoundManager
 from Event import Event
 from Menu import Start_menu
 from Menu import End_menu
+from Menu import Button
+from GameManager import Game_manager
 
 class Game_World:
     def __init__(self)->None:
@@ -20,10 +22,11 @@ class Game_World:
         self.screen=pygame.display.set_mode((1280,720))
         self.running=True
         self.clock=pygame.time.Clock()
-        #toggle this if you do/ don't want the main menu showing up
-        self.showing_menu=True
-        self.game_over=False
+        self.game_manager = Game_manager(self)
+        #toggle this if you don't want the main menu showing up
+        self.showing_menu=False
         self._events = {}
+        self.game_over=False
 
         self.active_game_objects=[]
         self.game_objects_to_add=[]
@@ -64,7 +67,7 @@ class Game_World:
         sm.Add_sfx("Ding","ding-36029.mp3",0.5)
         #sm.Play_sfx("Ding")
         sm.Add_music("spk","The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
-        sm.Play_music("spk")
+        # sm.Play_music("spk")
         sm2=SoundManager()
         #sm2.Stop_music()
 
@@ -78,6 +81,7 @@ class Game_World:
         pass
             
     def Awake(self):
+        self.game_manager.Start_game()
         for gameobject in self.active_game_objects:
             gameobject.Awake()
     def Start(self):
@@ -129,6 +133,8 @@ class Game_World:
             else:
                 for gameobject in self.active_game_objects:
                     gameobject.Update(delta_time)
+                self.draw_text(self.game_manager.Get_rounds_won_string(),(0,0,0), pygame.font.SysFont("arialblack",60), 640, 100)
+            
             
             #draws to screen
             pygame.display.flip()
@@ -146,6 +152,17 @@ class Game_World:
                         if (col1.Check_Touch(col2)): # does colide
                             col1.On_collision(col2)
                             col2.On_collision(col1)
+
+    # don't use this methode to restart the game
+    # instead, use the game managers "start game"
+    def Restart_game(self):
+        for object in self.active_game_objects:
+            self.game_objects_to_remove.append(object)
+
+    def draw_text(self, text, color, font, x, y):
+        img = font.render(text,True,color)
+        self.screen.blit(img,(x-(img.width/2),y))
+
 
     def Make_event(self, name):
         new_event = Event()
