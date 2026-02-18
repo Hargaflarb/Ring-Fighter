@@ -64,7 +64,6 @@ class Input_Handler():
         self._last_keypresses = []
         self._player = player
 
-
     @property
     def keybinds(self):
         return self._keybinds
@@ -76,9 +75,9 @@ class Input_Handler():
     def Add_Command(self, key, command):
         self.keybinds[key] = command
 
-    def Update(self, delta_time):
+    def Update(self, delta_time):        
         keys = pygame.key.get_pressed()
-        
+
         for key in self.keybinds.keys():
             if keys[key]:
                 self.keybinds[key].Execute(self._last_keypresses[key], delta_time)

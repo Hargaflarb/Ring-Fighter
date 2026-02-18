@@ -18,5 +18,7 @@ class MoveCommand(Command):
                 self._direction.normalize
             change = ((self._direction * self._speed))
             self._player.transform.translate(change*delta_time)
-        
+
+            # tells character that an action has been made
+            self._player.Action_notification()
     

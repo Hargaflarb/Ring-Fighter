@@ -13,3 +13,7 @@ class Block_command(Command):
     def Execute(self, is_repeated, delta_time):
         if (not is_repeated) & self.Pass_filter(self._player.input_filter):
             self._player.Block_toggle()
+
+            # tells character that an action has been made
+            self._player.Action_notification()
+

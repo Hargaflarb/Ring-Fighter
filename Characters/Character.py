@@ -9,6 +9,9 @@ class Character(GameObject):
         self._blocking = False
         self._character_name = character_name
         self._sound_pack = Character_sound_pack(self._character_name)
+        self._time_since_action = 0 # used for taunt
+        self._taunt_wait_time = 5
+
 
     @property
     def crouching(self):
@@ -21,6 +24,18 @@ class Character(GameObject):
     @property
     def sound_pack(self):
         return self._sound_pack
+
+    def Update(self, delta_time):
+        self._time_since_action += delta_time
+        if self._time_since_action >= self._taunt_wait_time:
+            self._sound_pack.Play_Taunt()
+            self._time_since_action = 0
+
+        super().Update(delta_time)
+
+    def Action_notification(self):
+        self._time_since_action = 0
+
 
     def Crouch_toggle(self):
         old_rect = self.Get_component("Colider").rect
@@ -41,6 +56,9 @@ class Character(GameObject):
         self._blocking = not self._blocking
 
     def Take_knockback(self, knockback, facing):
+        # resets taunt-timer
+        self._time_since_action = 0
+
         # play hit sound
         self._sound_pack.Play_Hit()
 
