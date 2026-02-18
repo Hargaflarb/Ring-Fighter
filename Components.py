@@ -260,10 +260,11 @@ class Colider(Component):
 
 
 class SpriteRenderer(Component):
-    def __init__(self,sprite_name) ->None:
+    def __init__(self,sprite_name,direction) ->None:
         super().__init__()
         #!make sure the asset is in the correct sub-folder!
         self._sprite_image=pygame.image.load(f"assets\\Images\\{sprite_name}")
+        self._sprite_image = self.Flip(self._sprite_image, direction)
         self._sprite=pygame.sprite.Sprite()
         self._sprite.rect=self._sprite_image.get_rect()
 
@@ -292,6 +293,17 @@ class SpriteRenderer(Component):
         x = position[0] - (self.sprite_image.get_width()/2)
         y = position[1] - (self.sprite_image.height)
         return pygame.math.Vector2(x,y)
+    
+      
+    def Flip(self, sprite, direction):
+        if direction == "right":
+            flipped_image = pygame.transform.flip(sprite, True, False)  
+        elif direction == "left":
+            flipped_image = pygame.transform.flip(sprite, False, False)
+        else:
+            flipped_image = sprite
+        return flipped_image
+        
 
 
 
@@ -334,4 +346,4 @@ class Animator(Component):
 
     def Play_animation(self,animation_name):
         self.current_animation=self.animations[animation_name]
-        
+  
