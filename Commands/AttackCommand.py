@@ -20,3 +20,7 @@ class Attack_command(Command):
             the_attack = self._attack_data.Make_attack_object(self._player.game_world, self._player)
             self._player.game_world.game_objects_to_add.append(the_attack)
 
+            # tells character that an action has been made
+            self._player.Action_notification()
+
+

@@ -23,6 +23,8 @@ class Attack(GameObject):
     
     def Start(self):
         #play sound effect here
+        self.character.sound_pack.Play_attack_SFX(self.data.type)
+
         #play windup animation here (for windup time/duration)
         self._character.input_filter.append("attack")
         return super().Start()

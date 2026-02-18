@@ -14,6 +14,7 @@ class SoundManager():
         #self._current_music=None
         self._music_volume=1
         self._sfx_volume=1
+        print("i got initiated")
     
     def Add_sfx(self,sfx_name,sfx_file,volume):
         #!make sure the asset is in the correct sub-folder!
@@ -27,6 +28,11 @@ class SoundManager():
     def Play_sfx(self,sfx_name):
         active_sfx=self._sound_effects[sfx_name]
         active_sfx.play()
+
+    def Write_sound_effects(self):
+        print("sound effects are:")
+        for sound in self._sound_effects.keys():
+            print(sound, end = ", ")
 
 
     def Play_music(self,music_name):
