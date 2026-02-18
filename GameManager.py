@@ -5,6 +5,7 @@ from Environment.Void import Void
 from Components import Colider
 from Components import SpriteRenderer
 from MatchData import Match_data
+from Game_states import Game_States
 import pygame
 
 
@@ -37,7 +38,6 @@ class Game_manager():
         elif self._rounds_won[1] >= 3:
             print("player lost the match")
             self.Start_game() # temp game restart
-            # call loss screen
         else:
             self.Spawn_Characters()
             # load new round
@@ -47,7 +47,7 @@ class Game_manager():
         self._current_match += 1
         if self._current_match >= 2:
             print("player won the game")
-            # call win screen
+            self._game_world.game_state=Game_States.End_screen
         else:
             self.Set_up_arena()
             self.Next_round()
@@ -56,7 +56,8 @@ class Game_manager():
     def Start_game(self):
         print("new game started")
         self._game_world.Restart_game()
-        self._current_match = -1
+        #self._current_match = -1
+        self._game_world.game_state=Game_States.Gameplay
         self.Next_match()
 
     def Set_up_arena(self):

@@ -13,8 +13,8 @@ from SoundManager import SoundManager
 from Event import Event
 from Menu import Start_menu
 from Menu import End_menu
-from Menu import Button
 from GameManager import Game_manager
+from Game_states import Game_States
 
 class Game_World:
     def __init__(self)->None:
@@ -24,9 +24,8 @@ class Game_World:
         self.clock=pygame.time.Clock()
         self.game_manager = Game_manager(self)
         #toggle this if you don't want the main menu showing up
-        self.showing_menu=False
         self._events = {}
-        self.game_over=False
+        self.game_state=Game_States.Main_menu
 
         self.active_game_objects=[]
         self.game_objects_to_add=[]
@@ -42,11 +41,6 @@ class Game_World:
         self.start_menu= Start_menu(self.screen)
         self.end_menu=End_menu(self.screen)
 
-        player = Player(self, pygame.math.Vector2(640, 360), 0.5)
-        self.game_objects_to_add.append(player)
-        enemy = Enemy(self, pygame.math.Vector2(800, 360), 0.5)
-        self.game_objects_to_add.append(enemy)
-
         floor = GameObject(self, pygame.math.Vector2(640, 720), 0.5)
         floor.Add_component(Colider((500, 300, 500, 0), 1))
         self.game_objects_to_add.append(floor)
@@ -61,8 +55,6 @@ class Game_World:
 
         self.game_objects_to_add.append(Void(self))
 
-
-
         sm=SoundManager()
         sm.Add_sfx("Ding","ding-36029.mp3",0.5)
         #sm.Play_sfx("Ding")
@@ -71,17 +63,21 @@ class Game_World:
         sm2=SoundManager()
         #sm2.Stop_music()
 
+    @property
+    def game_state(self):
+        return self._game_state
+        
+    @game_state.setter
+    def game_state(self,value):
+        self._game_state=value
+
 
     @property
     def Screen(self):
             return self.screen
-    
-    def Reset_Game(self):
-        #put new game/reset code here
-        pass
             
     def Awake(self):
-        self.game_manager.Start_game()
+        
         for gameobject in self.active_game_objects:
             gameobject.Awake()
     def Start(self):
@@ -114,23 +110,20 @@ class Game_World:
 
             #add things to draw
             #basic state, can be removed later
-            if self.showing_menu:
+            if self._game_state==Game_States.Main_menu:
                 #also add menu background here
                 returned_string=self.start_menu.draw_menu()
                 if returned_string=="start":
-                    self.showing_menu=False
-                    self.Reset_Game()
+                    self.game_manager.Start_game()
                 elif returned_string=="quit":
                     self.running=False
-            elif self.game_over:
+            elif self._game_state==Game_States.End_screen:
                 returned_string=self.end_menu.draw_menu()
                 if returned_string=="main_menu":
-                    self.game_over=False
-                    self.showing_menu=True
+                    self._game_state=Game_States.Main_menu
                 elif returned_string=="restart":
-                    self.game_over=False
-                    self.Reset_Game()
-            else:
+                    self.game_manager.Start_game()
+            elif self._game_state==Game_States.Gameplay:
                 for gameobject in self.active_game_objects:
                     gameobject.Update(delta_time)
                 self.draw_text(self.game_manager.Get_rounds_won_string(),(0,0,0), pygame.font.SysFont("arialblack",60), 640, 100)
