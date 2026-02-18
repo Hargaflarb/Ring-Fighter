@@ -8,8 +8,8 @@ import pygame
 
 
 class Enemy(Character):
-    def __init__(self, game_world, position, scale):
-        super().__init__(game_world, position, scale)
+    def __init__(self, game_world, position, scale, character_name):
+        super().__init__(game_world, position, scale, character_name)
 
         speed = 50
         sr = self.Add_component(Components.SpriteRenderer("temp playercharacter.png"))

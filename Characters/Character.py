@@ -1,11 +1,14 @@
 from GameObject import GameObject
 from abc import ABC
+from CharacterSoundPack import Character_sound_pack
 
 class Character(GameObject):
-    def __init__(self, game_world, position, scale):
+    def __init__(self, game_world, position, scale, character_name):
         super().__init__(game_world, position, scale)
         self._crouching = False
         self._blocking = False
+        self._character_name = character_name
+        self._sound_pack = Character_sound_pack(self._character_name)
 
     @property
     def crouching(self):
@@ -15,6 +18,9 @@ class Character(GameObject):
     def blocking(self):
         return self._blocking
     
+    @property
+    def sound_pack(self):
+        return self._sound_pack
 
     def Crouch_toggle(self):
         old_rect = self.Get_component("Colider").rect
@@ -35,6 +41,10 @@ class Character(GameObject):
         self._blocking = not self._blocking
 
     def Take_knockback(self, knockback, facing):
+        # play hit sound
+        self._sound_pack.Play_Hit()
+
         # play hit animation
         self.Get_component("Momentum").Give_Momentum(knockback, facing)
 
+    

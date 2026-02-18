@@ -2,6 +2,7 @@ from GameObject import GameObject
 from Characters.Player import Player
 from Characters.Enemy import Enemy
 from Environment.Void import Void
+from Environment.FallTrigger import Fall_trigger
 from Components import Colider
 from Components import SpriteRenderer
 from MatchData import Match_data
@@ -16,7 +17,7 @@ class Game_manager():
 
         self._current_match = -1
         self._match_datas = []
-        self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
+        self._match_datas.append(Match_data(self._game_world, "some type", "Malthe","Emma"))
         self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
         self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
 
@@ -80,6 +81,7 @@ class Game_manager():
         self._game_world.game_objects_to_add.append(wall)
 
         self._game_world.game_objects_to_add.append(Void(self._game_world))
+        self._game_world.game_objects_to_add.append(Fall_trigger(self._game_world))
 
     def Spawn_Characters(self):
         characters = self._match_datas[self._current_match].Create_characters()
