@@ -161,18 +161,21 @@ class Character_select_menu():
                 self.emma_button.change_image(1)
                 self.malthe_button.change_image(1)
                 self.chosen_character="Echo"
+                self.sm.Play_sfx("EchoT1")
                 self.character_chosen=True
             if self.emma_button.draw(self.screen):
                 self.emma_button.change_image(2)
                 self.echo_button.change_image(1)
                 self.malthe_button.change_image(1)
                 self.chosen_character="Emma"
+                self.sm.Play_sfx("EmmaT2")
                 self.character_chosen=True
             if self.malthe_button.draw(self.screen):
                 self.malthe_button.change_image(2)
                 self.emma_button.change_image(1)
                 self.echo_button.change_image(1)
                 self.chosen_character="Malthe"
+                self.sm.Play_sfx("MaltheT1")
                 self.character_chosen=True
             if self.start_button.draw(self.screen) & (self.character_chosen is not None):
                 self.echo_button.change_image(1)
