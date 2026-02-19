@@ -13,6 +13,7 @@ from SoundManager import SoundManager
 from Event import Event
 from Menu import Start_menu
 from Menu import End_menu
+from Menu import Character_select_menu
 from GameManager import Game_manager
 from Game_states import Game_States
 
@@ -40,6 +41,7 @@ class Game_World:
 
         self.start_menu= Start_menu(self.screen)
         self.end_menu=End_menu(self.screen,self.game_manager)
+        self.character_select_menu=Character_select_menu(self.screen)
 
         floor = GameObject(self, pygame.math.Vector2(640, 720), 0.5)
         floor.Add_component(Colider((500, 300, 500, 0), 1))
@@ -114,9 +116,15 @@ class Game_World:
                 #also add menu background here
                 returned_string=self.start_menu.draw_menu()
                 if returned_string=="start":
-                    self.game_manager.Start_game()
+                    self._game_state=Game_States.Character_select
                 elif returned_string=="quit":
                     self.running=False
+            elif self._game_state==Game_States.Character_select:
+                returned_string=self.character_select_menu.draw_menu()
+                if returned_string=="start":
+                    self.game_manager.Start_game()
+                elif returned_string=="main_menu":
+                    self._game_state=Game_States.Main_menu
             elif self._game_state==Game_States.End_screen_win or self._game_state==Game_States.End_screen_lose:
                 returned_string=""
                 if self._game_state==Game_States.End_screen_lose:
