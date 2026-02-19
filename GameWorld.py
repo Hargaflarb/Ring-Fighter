@@ -117,11 +117,16 @@ class Game_World:
                     self.game_manager.Start_game()
                 elif returned_string=="quit":
                     self.running=False
-            elif self._game_state==Game_States.End_screen:
+            elif self._game_state==Game_States.End_screen_win or self._game_state==Game_States.End_screen_lose:
+                if self._game_state==Game_States.End_screen_win:
+                    pass
+                else:
+                    pass
                 returned_string=self.end_menu.draw_menu()
                 if returned_string=="main_menu":
                     self._game_state=Game_States.Main_menu
                 elif returned_string=="restart":
+                    self.game_manager.Score=0
                     self.game_manager.Start_game()
             elif self._game_state==Game_States.Gameplay:
                 for gameobject in self.active_game_objects:

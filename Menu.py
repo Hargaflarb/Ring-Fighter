@@ -1,5 +1,6 @@
 import pygame
 from SoundManager import SoundManager
+from GameManager import Game_manager
 
 class Start_menu():
     #singleton code; creates a new instance if none exist, otherwise returns the instance
@@ -107,7 +108,7 @@ class End_menu():
         self.screen.blit(img,(x,y))
 
     def draw_menu(self):
-            self.draw_text("Score goes here",self.screen.width/2-300,230)
+            self.draw_text(f"Score: {5}",self.screen.width/2-300,230)
             if self.restart_button.draw(self.screen):
                 return "restart"
             if self.menu_button.draw(self.screen):

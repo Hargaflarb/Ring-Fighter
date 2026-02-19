@@ -14,30 +14,42 @@ class Game_manager():
         self._game_world = game_world
         self._characters = []
         self._rounds_won = [0,0]
+        self._score=0
 
         self._current_match = -1
         self._match_datas = []
         self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
         self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
         self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
+    
+    @property
+    def Score(self):
+        return self._score
+    
+    @Score.setter
+    def Score(self,value):
+        self._score=value
 
     def End_round(self, winner): #1 = player, 2 = enemy
         if winner == 1: # player
             self._rounds_won[0] += 1
+            self._score+=50
             print("player won the round")
         elif winner == 2: # enemy
             self._rounds_won[1] += 1
+            self._score-=20
             print("player lost the round")
         self.Despawn_Characters()
         self.Next_round()
 
     def Next_round(self):
-        if self._rounds_won[0] >= 3:
+        if self._rounds_won[0] >= 2:
             print("player won the match")
+            self._score+=200
             self.Next_match()
-        elif self._rounds_won[1] >= 3:
+        elif self._rounds_won[1] >= 2:
             print("player lost the match")
-            self.Start_game() # temp game restart
+            self._game_world.game_state=Game_States.End_screen_lose
         else:
             self.Spawn_Characters()
             # load new round
@@ -47,7 +59,7 @@ class Game_manager():
         self._current_match += 1
         if self._current_match >= 2:
             print("player won the game")
-            self._game_world.game_state=Game_States.End_screen
+            self._game_world.game_state=Game_States.End_screen_win
         else:
             self.Set_up_arena()
             self.Next_round()
@@ -56,7 +68,7 @@ class Game_manager():
     def Start_game(self):
         print("new game started")
         self._game_world.Restart_game()
-        #self._current_match = -1
+        self._current_match = -1
         self._game_world.game_state=Game_States.Gameplay
         self.Next_match()
 

@@ -4,4 +4,5 @@ class Game_States(Enum):
     Null=1
     Gameplay=2
     Main_menu=3
-    End_screen=4
+    End_screen_win=4
+    End_screen_lose=4
