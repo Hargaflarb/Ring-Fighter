@@ -50,11 +50,11 @@ class SoundManager():
         pygame.mixer.music.set_volume(self._current_music.volume*value)
 
     def Change_sfx_volume(self,value):
-        for key,sound in self._sound_effects:
-            sound.volume=sound.volume/self._sfx_volume
+        for key,sound in self._sound_effects.items():
+            sound.set_volume(sound.get_volume()/self._sfx_volume)
         self._sfx_volume=value
-        for key,sound in self._sound_effects:
-            sound.volume=sound.volume*self._sfx_volume
+        for key,sound in self._sound_effects.items():
+            sound.set_volume(sound.get_volume()*self._sfx_volume)
 
 class Audio():
     #most fields should not be editable after the class is initialised

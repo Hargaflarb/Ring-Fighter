@@ -1,5 +1,6 @@
 import pygame
 from SoundManager import SoundManager
+from GameManager import Game_manager
 
 class Start_menu():
     #singleton code; creates a new instance if none exist, otherwise returns the instance
@@ -13,37 +14,51 @@ class Start_menu():
         self.font=pygame.font.SysFont("arialblack",60)
         self.text_colour=(0,0,0)
         self.showing_options=False
+        self.showing_controls=False
         self.music_volume_number=10
         self.sfx_volume_number=10
         self.create_menu()
         self.create_options()
+        self.create_control_display()
         self.sm=SoundManager()
 
     def create_menu(self):
         start_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\startbtn.png")
-        self.start_button=Button(self.screen.width/2,150,start_btn_image,1)
+        self.start_button=Button(self.screen.width/2,250,start_btn_image,None,1)
         options_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\optionsbtn.png")
-        self.options_button=Button(self.screen.width/2,300,options_btn_image,1)
+        self.options_button=Button(self.screen.width/2,400,options_btn_image,None,1)
         quit_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\quitbtn.png")
-        self.quit_button=Button(self.screen.width/2,450,quit_btn_image,1)
+        self.quit_button=Button(self.screen.width/2,550,quit_btn_image,None,1)
+        menu_background_img=pygame.image.load(f"assets\\Images\\menuitems\\cliff stock photo.jpg")
+        self.menu_background=pygame.transform.scale(menu_background_img,(int(menu_background_img.width*(self.screen.width/menu_background_img.width)),int(menu_background_img.height*(self.screen.height/menu_background_img.height))))
 
     def create_options(self):
         back_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\backbtn.png")
-        self.back_button=Button(200,self.screen.height-150,back_btn_image,1)
+        self.back_button=Button(200,self.screen.height-150,back_btn_image,None,1)
+        controls_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\controlsbtn.png")
+        self.controls_button=Button(self.screen.width/2,self.screen.height-200,controls_btn_image,None,1)
         plus_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\plusbtn.png")
-        self.plus_music_button=Button(self.screen.width/2-200,120,plus_btn_image,1)
+        self.plus_music_button=Button(self.screen.width/2-200,120,plus_btn_image,None,1)
         minus_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\minusbtn.png")
-        self.minus_music_button=Button(self.screen.width/2+200,120,minus_btn_image,1)
+        self.minus_music_button=Button(self.screen.width/2+200,120,minus_btn_image,None,1)
 
-        self.plus_sfx_button=Button(self.screen.width/2-200,350,plus_btn_image,1)
-        self.minus_sfx_button=Button(self.screen.width/2+200,350,minus_btn_image,1)
+        self.plus_sfx_button=Button(self.screen.width/2-200,350,plus_btn_image,None,1)
+        self.minus_sfx_button=Button(self.screen.width/2+200,350,minus_btn_image,None,1)
+
+    def create_control_display(self):
+        back_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\backbtn.png")
+        self.controls_back_button=Button(self.screen.width/2,self.screen.height-70,back_btn_image,None,1)
+        controls_img=pygame.image.load(f"assets\\Images\\menuitems\\controlspanel.png")
+        self.controls_img=pygame.transform.scale(controls_img,(int(controls_img.width),int(controls_img.height)))
         
     def draw_text(self,text,x,y):
         img=self.font.render(text,True,self.text_colour)
         self.screen.blit(img,(x,y))
 
     def draw_menu(self):
+        self.screen.blit(self.menu_background,(0,0))
         if self.showing_options==False:
+            self.draw_text("Ring Fighter",self.screen.width/2-160,50)
             if self.start_button.draw(self.screen):
                 return "start"
             if self.options_button.draw(self.screen):
@@ -51,44 +66,174 @@ class Start_menu():
             if self.quit_button.draw(self.screen):
                 return "quit"
         else:
-            self.draw_text("Music volume",self.screen.width/2-300,0)
-            if self.plus_music_button.draw(self.screen):
-                if(self.music_volume_number<10):
-                    self.music_volume_number+=1
-                    new_volume=float(self.music_volume_number/10)
-                    self.sm.Change_music_volume(new_volume)
-            if self.minus_music_button.draw(self.screen):
-                if(self.music_volume_number>0):
-                    self.music_volume_number-=1
-                    new_volume=float(self.music_volume_number/10)
-                    self.sm.Change_music_volume(new_volume)
-            self.draw_text(f"{self.music_volume_number}",self.screen.width/2-50,80)
-            
-            self.draw_text("SFX volume",self.screen.width/2-300,230)
-            if self.plus_sfx_button.draw(self.screen):
-                if(self.sfx_volume_number<10):
-                    self.sfx_volume_number+=1
-                    new_volume=float(self.sfx_volume_number/10)
-                    self.sm.Change_sfx_volume(new_volume)
-            if self.minus_sfx_button.draw(self.screen):
-                if(self.sfx_volume_number>0):
-                    self.sfx_volume_number-=1
-                    new_volume=float(self.sfx_volume_number/10)
-                    self.sm.Change_sfx_volume(new_volume)
-            self.draw_text(f"{self.sfx_volume_number}",self.screen.width/2-50,310)
+            if self.showing_controls==True:
+                self.screen.blit(self.controls_img,(140,0))
+                if self.controls_back_button.draw(self.screen):
+                    self.showing_controls=False
+            else:
+                self.draw_text("Music volume",self.screen.width/2-300,0)
+                if self.plus_music_button.draw(self.screen):
+                    if(self.music_volume_number<10):
+                        self.music_volume_number+=1
+                        new_volume=float(self.music_volume_number/10)
+                        self.sm.Change_music_volume(new_volume)
+                if self.minus_music_button.draw(self.screen):
+                    if(self.music_volume_number>0):
+                        self.music_volume_number-=1
+                        new_volume=float(self.music_volume_number/10)
+                        self.sm.Change_music_volume(new_volume)
+                self.draw_text(f"{self.music_volume_number}",self.screen.width/2-50,80)
+                
+                self.draw_text("SFX volume",self.screen.width/2-300,230)
+                if self.plus_sfx_button.draw(self.screen):
+                    if(self.sfx_volume_number<10):
+                        self.sfx_volume_number+=1
+                        new_volume=float(self.sfx_volume_number/10)
+                        self.sm.Change_sfx_volume(new_volume)
+                if self.minus_sfx_button.draw(self.screen):
+                    if(self.sfx_volume_number>0):
+                        self.sfx_volume_number-=1
+                        new_volume=float(self.sfx_volume_number/10)
+                        self.sm.Change_sfx_volume(new_volume)
+                self.draw_text(f"{self.sfx_volume_number}",self.screen.width/2-50,310)
+                if self.controls_button.draw(self.screen):
+                    self.showing_controls=True
 
-            if self.back_button.draw(self.screen):
-                self.showing_options=False
+                if self.back_button.draw(self.screen):
+                    self.showing_options=False
+
+class End_menu():
+    #singleton code; creates a new instance if none exist, otherwise returns the instance
+    def __new__(cls,screen,game_manager):
+        if not hasattr(cls,'instance'):
+            cls.instance=super().__new__(cls)
+        return cls.instance
+    
+    def __init__(self,screen,game_manager):
+        self.screen=screen
+        self.font=pygame.font.SysFont("arialblack",60)
+        self.text_colour=(0,0,0)
+        self.music_volume_number=10
+        self.sfx_volume_number=10
+        self.game_manager=game_manager
+        self.create_menu()
+        self.sm=SoundManager()
+
+    def create_menu(self):
+        restart_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\restartbtn.png")
+        self.restart_button=Button(300,self.screen.height-100,restart_btn_image, None,1)
+        menu_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\mainmenubtn.png")
+        self.menu_button=Button(self.screen.width-300,self.screen.height-100,menu_btn_image,None,1)
+        menu_background_img=pygame.image.load(f"assets\\Images\\menuitems\\cliff stock photo.jpg")
+        self.menu_background=pygame.transform.scale(menu_background_img,(int(menu_background_img.width*(self.screen.width/menu_background_img.width)),int(menu_background_img.height*(self.screen.height/menu_background_img.height))))
         
+    def draw_text(self,text,x,y):
+        img=self.font.render(text,True,self.text_colour)
+        self.screen.blit(img,(x,y))
+
+    def draw_menu(self,did_player_win):
+            self.screen.blit(self.menu_background,(0,0))
+            if did_player_win==True:
+                self.draw_text(f"You Win!",self.screen.width/2-300,100)
+            else:
+                self.draw_text(f"You Lose...",self.screen.width/2-300,100)
+            self.draw_text(f"Score: {self.game_manager.Score}",self.screen.width/2-300,230)
+            if self.restart_button.draw(self.screen):
+                return "restart"
+            if self.menu_button.draw(self.screen):
+                return "main_menu"
+        
+class Character_select_menu():
+    #singleton code; creates a new instance if none exist, otherwise returns the instance
+    def __new__(cls,screen):
+        if not hasattr(cls,'instance'):
+            cls.instance=super().__new__(cls)
+        return cls.instance
+    
+    def __init__(self,screen):
+        self.screen=screen
+        self.font=pygame.font.SysFont("arialblack",60)
+        self.text_colour=(0,0,0)
+        self.music_volume_number=10
+        self.sfx_volume_number=10
+        self.create_menu()
+        self.sm=SoundManager()
+        self.character_chosen=None
+
+    def create_menu(self):
+        start_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\startbtn.png")
+        self.start_button=Button(self.screen.width-300,self.screen.height-100,start_btn_image,None,1)
+        menu_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\mainmenubtn.png")
+        self.menu_button=Button(300,self.screen.height-100,menu_btn_image,None,1)
+        echo_not_chosen_image=pygame.image.load(f"assets\\Images\\menuitems\\char choice echo.png")
+        echo_chosen_image=pygame.image.load(f"assets\\Images\\menuitems\\char choice echo chosen.png")
+        self.echo_button=Button(300,self.screen.height-400,echo_not_chosen_image,echo_chosen_image,2)
+        emma_not_chosen_image=pygame.image.load(f"assets\\Images\\menuitems\\char choice emma.png")
+        emma_chosen_image=pygame.image.load(f"assets\\Images\\menuitems\\char choice emma chosen.png")
+        self.emma_button=Button(self.screen.width/2,self.screen.height-400,emma_not_chosen_image,emma_chosen_image,2)
+        malthe_not_chosen_image=pygame.image.load(f"assets\\Images\\menuitems\\char choice malthe.png")
+        malthe_chosen_image=pygame.image.load(f"assets\\Images\\menuitems\\char choice malthe chosen.png")
+        self.malthe_button=Button(self.screen.width-300,self.screen.height-400,malthe_not_chosen_image,malthe_chosen_image,2)
+        menu_background_img=pygame.image.load(f"assets\\Images\\menuitems\\cliff stock photo.jpg")
+        self.menu_background=pygame.transform.scale(menu_background_img,(int(menu_background_img.width*(self.screen.width/menu_background_img.width)),int(menu_background_img.height*(self.screen.height/menu_background_img.height))))
+        
+    def draw_text(self,text,x,y):
+        img=self.font.render(text,True,self.text_colour)
+        self.screen.blit(img,(x,y))
+
+    def draw_menu(self):
+            self.screen.blit(self.menu_background,(0,0))
+            if self.echo_button.draw(self.screen):
+                self.echo_button.change_image(2)
+                self.emma_button.change_image(1)
+                self.malthe_button.change_image(1)
+                self.chosen_character="Echo"
+                self.sm.Play_sfx("EchoT1")
+                self.character_chosen=True
+            if self.emma_button.draw(self.screen):
+                self.emma_button.change_image(2)
+                self.echo_button.change_image(1)
+                self.malthe_button.change_image(1)
+                self.chosen_character="Emma"
+                self.sm.Play_sfx("EmmaT2")
+                self.character_chosen=True
+            if self.malthe_button.draw(self.screen):
+                self.malthe_button.change_image(2)
+                self.emma_button.change_image(1)
+                self.echo_button.change_image(1)
+                self.chosen_character="Malthe"
+                self.sm.Play_sfx("MaltheT1")
+                self.character_chosen=True
+            if self.start_button.draw(self.screen) & (self.character_chosen is not None):
+                self.echo_button.change_image(1)
+                self.emma_button.change_image(1)
+                self.malthe_button.change_image(1)
+                print (f"character chosen: {self.chosen_character}")
+                return (self.chosen_character)
+            if self.menu_button.draw(self.screen):
+                return "main_menu"
+            if self.echo_button.draw(self.screen):
+                self.echo_button.change_image(2)
 
 class Button():
-    def __init__(self,x,y,image,scale):
-        width=image.get_width()
-        height=image.get_height()
-        self.image=pygame.transform.scale(image,(int(width*scale),int(height*scale)))
+    def __init__(self,x,y,image1,image2,scale):
+        width=image1.get_width()
+        height=image1.get_height()
+        self.image=pygame.transform.scale(image1,(int(width*scale),int(height*scale)))
         self.rect=self.image.get_rect()
         self.rect.center=(x,y)
         self.clicked=False
+        self.scale=scale
+        self.image1=pygame.transform.scale(image1,(int(width*scale),int(height*scale)))
+        if image2 is not None:
+            self.image2=pygame.transform.scale(image2,(int(width*scale),int(height*scale)))
+        self.position=(x,y)
+
+    def change_image(self,number):
+        if number==2:
+            self.image=self.image2
+        else:
+            self.image=self.image1
 
     def draw(self,surface):
         action=False
