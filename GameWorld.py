@@ -47,7 +47,7 @@ class Game_World:
         self.selected_character=None
 
         self.Add_SFX()
-
+        self.Add_Music()
         # sm=SoundManager()
         # sm.Add_sfx("Ding","ding-36029.mp3",0.5)
         # sm.Add_music("spk","The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
@@ -99,7 +99,7 @@ class Game_World:
             delta_time=self.clock.tick(60)/1000.0
 
             #background colour
-            self.screen.fill("green")
+            self.screen.fill("cornflowerblue")
 
             #add things to draw
             #basic state, can be removed later
@@ -196,6 +196,13 @@ class Game_World:
         sm.Add_sfx("EchoH","Echo\\Echo_hit2.mp3",0.5)
         sm.Add_sfx("EchoT1","Echo\\Echo_taunt1.mp3",0.5)
         sm.Add_sfx("EchoT2","Echo\\Echo_taunt2.mp3",0.5)
+
+    def Add_Music(self):
+        sm = SoundManager.instance
+        sm.Add_music("fighting","upbeat background music 2.mp3",0.5)
+        sm.Add_music("lose","sad music.mp3",0.5)
+        sm.Add_music("win","victory music.mp3",0.5)
+        sm.Play_music("fighting")
 
     def Make_event(self, name):
         new_event = Event()
