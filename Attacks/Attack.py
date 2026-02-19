@@ -52,7 +52,7 @@ class Attack(GameObject):
         #play hit animation
         #
         #adds colider and other components
-        for component in self.data.Added_components(self._facing):
+        for component in self.data.Added_components(self._facing, self.character.asset_pack):
             self.Add_component(component)
 
     def Start_cooldown(self):

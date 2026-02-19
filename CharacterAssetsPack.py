@@ -1,6 +1,7 @@
 from SoundManager import SoundManager
 from random import Random
 from Attacks.AttackType import Attack_type
+import pygame
 
 class Character_assets_pack():
     def __init__(self, animator, character_name):
@@ -8,7 +9,6 @@ class Character_assets_pack():
         self._animator = animator
         self.current_animation_ID = None
         self.default_animation_ID = None
-
         self._random = Random()
         self._sm = SoundManager.instance
 
@@ -36,6 +36,9 @@ class Character_assets_pack():
         elif attack_type == Attack_type.Ranged:
             self.Play_Ranged_Animation(attack_state)
 
+    def Get_projectile_sprite_name(self):
+        name = self._character_name
+        return f"{name}\\{name}Ranged\\{name} projectile.png"
 
     def Play_DownSmash_SFX(self):
         self._sm.Play_sfx(f"{self._character_name}DS")
