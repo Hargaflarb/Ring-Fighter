@@ -7,6 +7,7 @@ from Components import Colider
 from Components import SpriteRenderer
 from MatchData import Match_data
 from Game_states import Game_States
+from SoundManager import SoundManager
 import pygame
 
 
