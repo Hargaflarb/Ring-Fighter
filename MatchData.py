@@ -15,16 +15,14 @@ class Match_data():
     def Create_characters(self):
         characters = []
 
-        characters.append(Player(self._game_world, pygame.math.Vector2(480, 360), 0.75, "right", "Echo"))
-        characters.append(Enemy(self._game_world, pygame.math.Vector2(800, 360), 0.75, "left", characters[0], "Emma"))
+        characters.append(Player(self._game_world, pygame.math.Vector2(480, 360), 0.75, "right", self._player_type))
+        characters.append(Enemy(self._game_world, pygame.math.Vector2(800, 360), 0.75, "left", characters[0], self._enemy_type))
 
         return characters
 
 
     def Get_map_spritesrenderes(self):
         sprite_renderers = []
-        sprite_renderers.append(SpriteRenderer("temp playercharacter.png"))
-        sprite_renderers.append(SpriteRenderer("temp playercharacter.png"))
         sprite_renderers.append(SpriteRenderer("Maps\\mapice.png"))
         sprite_renderers.append(SpriteRenderer("temp playercharacter.png"))
         
