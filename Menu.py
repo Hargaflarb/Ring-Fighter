@@ -83,17 +83,18 @@ class Start_menu():
 
 class End_menu():
     #singleton code; creates a new instance if none exist, otherwise returns the instance
-    def __new__(cls,screen):
+    def __new__(cls,screen,game_manager):
         if not hasattr(cls,'instance'):
             cls.instance=super().__new__(cls)
         return cls.instance
     
-    def __init__(self,screen):
+    def __init__(self,screen,game_manager):
         self.screen=screen
         self.font=pygame.font.SysFont("arialblack",60)
         self.text_colour=(0,0,0)
         self.music_volume_number=10
         self.sfx_volume_number=10
+        self.game_manager=game_manager
         self.create_menu()
         self.sm=SoundManager()
 
@@ -107,8 +108,12 @@ class End_menu():
         img=self.font.render(text,True,self.text_colour)
         self.screen.blit(img,(x,y))
 
-    def draw_menu(self):
-            self.draw_text(f"Score: {5}",self.screen.width/2-300,230)
+    def draw_menu(self,did_player_win):
+            if did_player_win==True:
+                self.draw_text(f"You Win!",self.screen.width/2-300,100)
+            else:
+                self.draw_text(f"You Lose...",self.screen.width/2-300,100)
+            self.draw_text(f"Score: {self.game_manager.Score}",self.screen.width/2-300,230)
             if self.restart_button.draw(self.screen):
                 return "restart"
             if self.menu_button.draw(self.screen):

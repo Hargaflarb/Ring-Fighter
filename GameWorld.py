@@ -39,7 +39,7 @@ class Game_World:
         self.attack_types["ranged_attack"] = Attack_Data("ranged_attack", (0.7,0.0,0.8), (30,30), (-80,-70), (60,0), False)
 
         self.start_menu= Start_menu(self.screen)
-        self.end_menu=End_menu(self.screen)
+        self.end_menu=End_menu(self.screen,self.game_manager)
 
         floor = GameObject(self, pygame.math.Vector2(640, 720), 0.5)
         floor.Add_component(Colider((500, 300, 500, 0), 1))
@@ -118,11 +118,11 @@ class Game_World:
                 elif returned_string=="quit":
                     self.running=False
             elif self._game_state==Game_States.End_screen_win or self._game_state==Game_States.End_screen_lose:
-                if self._game_state==Game_States.End_screen_win:
-                    pass
+                returned_string=""
+                if self._game_state==Game_States.End_screen_lose:
+                    returned_string=self.end_menu.draw_menu(False)
                 else:
-                    pass
-                returned_string=self.end_menu.draw_menu()
+                    returned_string=self.end_menu.draw_menu(True)
                 if returned_string=="main_menu":
                     self._game_state=Game_States.Main_menu
                 elif returned_string=="restart":
