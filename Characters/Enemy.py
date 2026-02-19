@@ -18,7 +18,7 @@ class Enemy(Character):
 
         self._speed = 250
         self._opponent = opponent
-        sr = self.Add_component(Components.SpriteRenderer("Malthe\MaltheIdle\malthe idle 4.png", direction))
+        sr = self.Add_component(Components.SpriteRenderer("Malthe\MaltheIdle\malthe idle 4.png"))
         self._sprite_size = pygame.math.Vector2(sr.sprite_image.get_width(), sr.sprite_image.get_height())
         self._direction = direction
 

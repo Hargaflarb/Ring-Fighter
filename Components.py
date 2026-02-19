@@ -259,11 +259,11 @@ class Colider(Component):
 
 
 class SpriteRenderer(Component):
-    def __init__(self,sprite_name,direction) ->None:
+    def __init__(self,sprite_name) ->None:
         super().__init__()
         #!make sure the asset is in the correct sub-folder!
         self._sprite_image=pygame.image.load(f"assets\\Images\\{sprite_name}")
-        self._sprite_image = self.Flip(self._sprite_image, direction)
+        #self._sprite_image = self.Flip(self._sprite_image, direction)
         self._sprite=pygame.sprite.Sprite()
         self._sprite.rect=self._sprite_image.get_rect()
 

@@ -19,7 +19,7 @@ class Player(Character):
         super().__init__(game_world, position, scale, character_name)
 
         self.input_filter = []
-        self.sr = self.Add_component(Components.SpriteRenderer("Echo\\EchoIdle\\echo idle 6.png", "right"))
+        self.sr = self.Add_component(Components.SpriteRenderer("Echo\\EchoIdle\\echo idle 6.png"))
         input_handler = self.Add_component(Input_Handler(self))
         self._screen_size = pygame.math.Vector2(game_world.Screen.get_width(), game_world.screen.get_height())
         self._sprite_size = pygame.math.Vector2(self.sr.sprite_image.get_width(), self.sr.sprite_image.get_height())
