@@ -16,12 +16,9 @@ class Game_manager():
         self._characters = []
         self._rounds_won = [0,0]
         self._score=0
-
+        player=None
         self._current_match = -1
         self._match_datas = []
-        self._match_datas.append(Match_data(self._game_world, "some type", "Echo","Emma"))
-        self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
-        self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
     
     @property
     def Score(self):
@@ -66,11 +63,15 @@ class Game_manager():
             self.Next_round()
 
 
-    def Start_game(self):
+    def Start_game(self,character):
         print("new game started")
         self._game_world.Restart_game()
         self._current_match = -1
         self._score=0
+        self._match_datas.clear()
+        self._match_datas.append(Match_data(self._game_world, "some type", character,"Echo"))
+        self._match_datas.append(Match_data(self._game_world, "some type", character,"Emma"))
+        self._match_datas.append(Match_data(self._game_world, "some type", character,"Malthe"))
         self._game_world.game_state=Game_States.Gameplay
         self.Next_match()
 

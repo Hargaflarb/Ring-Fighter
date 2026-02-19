@@ -160,19 +160,26 @@ class Character_select_menu():
                 self.echo_button.change_image(2)
                 self.emma_button.change_image(1)
                 self.malthe_button.change_image(1)
+                self.chosen_character="Echo"
                 self.character_chosen=True
             if self.emma_button.draw(self.screen):
                 self.emma_button.change_image(2)
                 self.echo_button.change_image(1)
                 self.malthe_button.change_image(1)
+                self.chosen_character="Emma"
                 self.character_chosen=True
             if self.malthe_button.draw(self.screen):
                 self.malthe_button.change_image(2)
                 self.emma_button.change_image(1)
                 self.echo_button.change_image(1)
+                self.chosen_character="Malthe"
                 self.character_chosen=True
             if self.start_button.draw(self.screen) & (self.character_chosen is not None):
-                return "start"
+                self.echo_button.change_image(1)
+                self.emma_button.change_image(1)
+                self.malthe_button.change_image(1)
+                print (f"character chosen: {self.chosen_character}")
+                return (self.chosen_character)
             if self.menu_button.draw(self.screen):
                 return "main_menu"
             if self.echo_button.draw(self.screen):

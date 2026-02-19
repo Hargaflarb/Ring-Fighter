@@ -25,8 +25,8 @@ class Game_World:
         self.running=True
         self.clock=pygame.time.Clock()
         self.game_manager = Game_manager(self)
-        #toggle this if you don't want the main menu showing up
         self._events = {}
+         #toggle this if you don't want the main menu showing up
         self.game_state=Game_States.Main_menu
 
         self.active_game_objects=[]
@@ -44,6 +44,7 @@ class Game_World:
         self.start_menu= Start_menu(self.screen)
         self.end_menu=End_menu(self.screen,self.game_manager)
         self.character_select_menu=Character_select_menu(self.screen)
+        self.selected_character=None
 
         self.Add_SFX()
 
@@ -111,8 +112,10 @@ class Game_World:
                     self.running=False
             elif self._game_state==Game_States.Character_select:
                 returned_string=self.character_select_menu.draw_menu()
-                if returned_string=="start":
-                    self.game_manager.Start_game()
+                if ((returned_string=="Echo") or (returned_string=="Emma") or (returned_string=="Malthe")):
+                    self.selected_character=returned_string
+                    print(f"character: {returned_string}")
+                    self.game_manager.Start_game(returned_string)
                 elif returned_string=="main_menu":
                     self._game_state=Game_States.Main_menu
             elif self._game_state==Game_States.End_screen_win or self._game_state==Game_States.End_screen_lose:
@@ -125,7 +128,7 @@ class Game_World:
                     self._game_state=Game_States.Main_menu
                 elif returned_string=="restart":
                     self.game_manager._score=0
-                    self.game_manager.Start_game()
+                    self.game_manager.Start_game(self.selected_character)
             elif self._game_state==Game_States.Gameplay:
                 for gameobject in self.active_game_objects:
                     gameobject.Update(delta_time)
