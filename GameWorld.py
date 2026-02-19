@@ -6,6 +6,7 @@ from Components import Colider
 from Components import SpriteRenderer
 from Components import Animator
 from Attacks.AttackData import Attack_Data
+from Attacks.AttackType import Attack_type
 from Characters.Player import Player
 from Characters.Enemy import Enemy
 from Environment.Void import Void
@@ -31,22 +32,23 @@ class Game_World:
         self.game_objects_to_remove=[]
 
         self.attack_types = {}
-        self.attack_types["standard_attack"] = Attack_Data("standard_attack", (0.1,0.2,0.1), (50,30), (-80,-70), (60,0), False)
-        self.attack_types["low_attack"] = Attack_Data("low_attack", (0.5,0.2,0.3), (50,40), (-60,0), (210,0), True)
-        self.attack_types["down_attack"] = Attack_Data("down_attack", (0.2,0.1,0.8), (30,50), (-50,-20), (210,0), False)
-        self.attack_types["up_attack"] = Attack_Data("up_attack", (0.3,0.2,0.3), (40,70), (-80,-65), (120,100), False)
-        self.attack_types["ranged_attack"] = Attack_Data("ranged_attack", (0.7,0.0,0.8), (30,30), (-80,-70), (60,0), False)
+        self.attack_types["standard_attack"] = Attack_Data(Attack_type.StandardAttack, (0.1,0.2,0.1), (50,30), (-80,-70), (60,0), False)
+        self.attack_types["low_attack"] = Attack_Data(Attack_type.LowAttack, (0.5,0.2,0.3), (50,40), (-60,0), (210,0), True)
+        self.attack_types["down_attack"] = Attack_Data(Attack_type.DownSmash, (0.2,0.1,0.8), (30,50), (-50,-20), (210,0), False)
+        self.attack_types["up_attack"] = Attack_Data(Attack_type.UpSmash, (0.3,0.2,0.3), (40,70), (-80,-65), (120,100), False)
+        self.attack_types["ranged_attack"] = Attack_Data(Attack_type.Ranged, (0.7,0.0,0.8), (30,30), (-80,-70), (60,0), False)
         
         
         self.start_menu= Start_menu(self.screen)
 
+        self.Add_SFX()
 
-        sm=SoundManager()
-        sm.Add_sfx("Ding","ding-36029.mp3",0.5)
+        # sm=SoundManager()
+        # sm.Add_sfx("Ding","ding-36029.mp3",0.5)
+        # sm.Add_music("spk","The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
         #sm.Play_sfx("Ding")
-        sm.Add_music("spk","The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
         # sm.Play_music("spk")
-        sm2=SoundManager()
+        # sm2=SoundManager()
         #sm2.Stop_music()
 
 
@@ -128,6 +130,40 @@ class Game_World:
         img = font.render(text,True,color)
         self.screen.blit(img,(x-(img.width/2),y))
 
+    def Add_SFX(self):
+        sm = SoundManager.instance
+        sm.Add_sfx("EmmaDS","Emma\\emma down smash.mp3",0.5)
+        sm.Add_sfx("EmmaLA","Emma\\emma low attack.mp3",0.5)
+        #sm.Add_sfx("EmmaUS","Emma\\emma up smash.mp3",0.5)
+        sm.Add_sfx("EmmaSA","Emma\\emma standard attack.mp3",0.5)
+        sm.Add_sfx("EmmaR","Emma\\emma ranged.mp3",0.5)
+        sm.Add_sfx("EmmaF","Emma\\emma fall.mp3",0.5)
+        sm.Add_sfx("EmmaH1","Emma\\emma hit 1.mp3",0.5)
+        sm.Add_sfx("EmmaH2","Emma\\emma hit 2.mp3",0.5)
+        sm.Add_sfx("EmmaT1","Emma\\emma taunt 1.mp3",0.5)
+        sm.Add_sfx("EmmaT2","Emma\\emma taunt 2.mp3",0.5)
+
+        sm.Add_sfx("MaltheDS","Malthe\\DownSmash8k16.mp3",0.5)
+        sm.Add_sfx("MaltheLA","Malthe\\LowAttack8k16.mp3",0.5)
+        #sm.Add_sfx("MaltheUS","Malthe\\UpSmash8k16.mp3",0.5)
+        sm.Add_sfx("MaltheSA","Malthe\\StandardAttack8k16.mp3",0.5)
+        sm.Add_sfx("MaltheR","Malthe\\Ranged8k24.mp3",0.5)
+        sm.Add_sfx("MaltheF","Malthe\\Fall8k16.mp3",0.5)
+        sm.Add_sfx("MaltheH1","Malthe\\Hit8k16.mp3",0.5)
+        sm.Add_sfx("MaltheH2","Malthe\\Hit2nd8k16.mp3",0.5)
+        sm.Add_sfx("MaltheT1","Malthe\\Taunt8k16.mp3",0.5)
+        sm.Add_sfx("MaltheT2","Malthe\\Taunt2nd8k16.mp3",0.5)
+
+        sm.Add_sfx("EchoDS","Echo\\Echo_downsmash.mp3",0.5)
+        sm.Add_sfx("EchoLA","Echo\\Echo_crouchattack.mp3",0.5)
+        #sm.Add_sfx("EchoUS","Echo\\Echo up smash.mp3",0.5)
+        sm.Add_sfx("EchoSA","Echo\\Echo_attack.mp3",0.5)
+        sm.Add_sfx("EchoR","Echo\\Echo_ranged.mp3",0.5)
+        sm.Add_sfx("EchoF","Echo\\Echo_fall.mp3",0.5)
+        sm.Add_sfx("EchoH","Echo\\Echo_hit.mp3",0.5)
+        sm.Add_sfx("EchoH","Echo\\Echo_hit2.mp3",0.5)
+        sm.Add_sfx("EchoT1","Echo\\Echo_taunt1.mp3",0.5)
+        sm.Add_sfx("EchoT2","Echo\\Echo_taunt2.mp3",0.5)
 
     def Make_event(self, name):
         new_event = Event()

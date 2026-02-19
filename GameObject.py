@@ -2,7 +2,6 @@ import pygame
 from Components import Transform
 
 class GameObject:
-        
     def __init__(self,game_world,position,scale):
         self.components={}
         self.game_world=game_world

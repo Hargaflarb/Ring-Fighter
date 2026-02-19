@@ -15,8 +15,8 @@ from Components import Input_Handler
 
 
 class Player(Character):
-    def __init__(self, game_world, position, scale, direction):
-        super().__init__(game_world, position, scale)
+    def __init__(self, game_world, position, scale, direction, character_name):
+        super().__init__(game_world, position, scale, character_name)
 
         self.input_filter = []
         self.sr = self.Add_component(Components.SpriteRenderer("Echo\\EchoIdle\\echo idle 6.png", "right"))
