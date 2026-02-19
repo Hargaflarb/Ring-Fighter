@@ -48,6 +48,8 @@ class Game_manager():
             self.Next_match()
         elif self._rounds_won[1] >= 2:
             print("player lost the match")
+            sm=SoundManager.instance
+            sm.Play_music("lose")
             self._game_world.game_state=Game_States.End_screen_lose
         else:
             self.Spawn_Characters()
@@ -58,6 +60,8 @@ class Game_manager():
         self._current_match += 1
         if self._current_match >= 2:
             print("player won the game")
+            sm=SoundManager.instance
+            sm.Play_music("win")
             self._game_world.game_state=Game_States.End_screen_win
         else:
             self.Set_up_arena()
@@ -73,6 +77,8 @@ class Game_manager():
         self._match_datas.append(Match_data(self._game_world, "some type", character,"Echo"))
         self._match_datas.append(Match_data(self._game_world, "some type", character,"Emma"))
         self._match_datas.append(Match_data(self._game_world, "some type", character,"Malthe"))
+        sm=SoundManager.instance
+        sm.Play_music("fighting")
         self._game_world.game_state=Game_States.Gameplay
         self.Next_match()
 

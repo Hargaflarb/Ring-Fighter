@@ -99,7 +99,7 @@ class Game_World:
             delta_time=self.clock.tick(60)/1000.0
 
             #background colour
-            self.screen.fill("green")
+            self.screen.fill("cornflowerblue")
 
             #add things to draw
             #basic state, can be removed later
