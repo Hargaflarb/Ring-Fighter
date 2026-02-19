@@ -13,8 +13,10 @@ from Environment.Void import Void
 from SoundManager import SoundManager
 from Event import Event
 from Menu import Start_menu
-from Menu import Button
+from Menu import End_menu
+from Menu import Character_select_menu
 from GameManager import Game_manager
+from Game_states import Game_States
 
 class Game_World:
     def __init__(self)->None:
@@ -23,9 +25,9 @@ class Game_World:
         self.running=True
         self.clock=pygame.time.Clock()
         self.game_manager = Game_manager(self)
-        #toggle this if you don't want the main menu showing up
-        self.showing_menu=False
         self._events = {}
+         #toggle this if you don't want the main menu showing up
+        self.game_state=Game_States.Main_menu
 
         self.active_game_objects=[]
         self.game_objects_to_add=[]
@@ -40,6 +42,9 @@ class Game_World:
         
         
         self.start_menu= Start_menu(self.screen)
+        self.end_menu=End_menu(self.screen,self.game_manager)
+        self.character_select_menu=Character_select_menu(self.screen)
+        self.selected_character=None
 
         self.Add_SFX()
 
@@ -51,13 +56,21 @@ class Game_World:
         # sm2=SoundManager()
         #sm2.Stop_music()
 
+    @property
+    def game_state(self):
+        return self._game_state
+        
+    @game_state.setter
+    def game_state(self,value):
+        self._game_state=value
+
 
     @property
     def Screen(self):
             return self.screen
             
     def Awake(self):
-        self.game_manager.Start_game()
+        
         for gameobject in self.active_game_objects:
             gameobject.Awake()
     def Start(self):
@@ -90,14 +103,33 @@ class Game_World:
 
             #add things to draw
             #basic state, can be removed later
-            if self.showing_menu:
+            if self._game_state==Game_States.Main_menu:
                 #also add menu background here
                 returned_string=self.start_menu.draw_menu()
                 if returned_string=="start":
-                    self.showing_menu=False
+                    self._game_state=Game_States.Character_select
                 elif returned_string=="quit":
                     self.running=False
-            else:
+            elif self._game_state==Game_States.Character_select:
+                returned_string=self.character_select_menu.draw_menu()
+                if ((returned_string=="Echo") or (returned_string=="Emma") or (returned_string=="Malthe")):
+                    self.selected_character=returned_string
+                    print(f"character: {returned_string}")
+                    self.game_manager.Start_game(returned_string)
+                elif returned_string=="main_menu":
+                    self._game_state=Game_States.Main_menu
+            elif self._game_state==Game_States.End_screen_win or self._game_state==Game_States.End_screen_lose:
+                returned_string=""
+                if self._game_state==Game_States.End_screen_lose:
+                    returned_string=self.end_menu.draw_menu(False)
+                else:
+                    returned_string=self.end_menu.draw_menu(True)
+                if returned_string=="main_menu":
+                    self._game_state=Game_States.Main_menu
+                elif returned_string=="restart":
+                    self.game_manager._score=0
+                    self.game_manager.Start_game(self.selected_character)
+            elif self._game_state==Game_States.Gameplay:
                 for gameobject in self.active_game_objects:
                     gameobject.Update(delta_time)
                 self.draw_text(self.game_manager.Get_rounds_won_string(),(0,0,0), pygame.font.SysFont("arialblack",60), 640, 100)
@@ -115,7 +147,7 @@ class Game_World:
             for j in range(i + 1, len(self.active_game_objects)):
                     col1 = obj1.Get_component("Colider")
                     col2 = self.active_game_objects[j].Get_component("Colider")
-                    if (col1 != None) & (col2 != None): # both has coliders
+                    if (col1 != None) & (col2 != None): # both have coliders
                         if (col1.Check_Touch(col2)): # does colide
                             col1.On_collision(col2)
                             col2.On_collision(col1)
