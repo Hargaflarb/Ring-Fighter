@@ -64,7 +64,6 @@ class Input_Handler():
         self._last_keypresses = []
         self._player = player
 
-
     @property
     def keybinds(self):
         return self._keybinds
@@ -76,9 +75,9 @@ class Input_Handler():
     def Add_Command(self, key, command):
         self.keybinds[key] = command
 
-    def Update(self, delta_time):
+    def Update(self, delta_time):        
         keys = pygame.key.get_pressed()
-        
+
         for key in self.keybinds.keys():
             if keys[key]:
                 self.keybinds[key].Execute(self._last_keypresses[key], delta_time)
@@ -264,6 +263,7 @@ class SpriteRenderer(Component):
         super().__init__()
         #!make sure the asset is in the correct sub-folder!
         self._sprite_image=pygame.image.load(f"assets\\Images\\{sprite_name}")
+        #self._sprite_image = self.Flip(self._sprite_image, direction)
         self._sprite=pygame.sprite.Sprite()
         self._sprite.rect=self._sprite_image.get_rect()
 
@@ -292,6 +292,17 @@ class SpriteRenderer(Component):
         x = position[0] - (self.sprite_image.get_width()/2)
         y = position[1] - (self.sprite_image.height)
         return pygame.math.Vector2(x,y)
+    
+      
+    def Flip(self, sprite, direction):
+        if direction == "right":
+            flipped_image = pygame.transform.flip(sprite, True, False)  
+        elif direction == "left":
+            flipped_image = pygame.transform.flip(sprite, False, False)
+        else:
+            flipped_image = sprite
+        return flipped_image
+        
 
 
 
@@ -334,4 +345,4 @@ class Animator(Component):
 
     def Play_animation(self,animation_name):
         self.current_animation=self.animations[animation_name]
-        
+  
