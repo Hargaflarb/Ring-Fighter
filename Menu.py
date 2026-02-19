@@ -14,10 +14,12 @@ class Start_menu():
         self.font=pygame.font.SysFont("arialblack",60)
         self.text_colour=(0,0,0)
         self.showing_options=False
+        self.showing_controls=False
         self.music_volume_number=10
         self.sfx_volume_number=10
         self.create_menu()
         self.create_options()
+        self.create_control_display()
         self.sm=SoundManager()
 
     def create_menu(self):
@@ -31,6 +33,8 @@ class Start_menu():
     def create_options(self):
         back_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\backbtn.png")
         self.back_button=Button(200,self.screen.height-150,back_btn_image,None,1)
+        controls_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\controlsbtn.png")
+        self.controls_button=Button(self.screen.width/2,self.screen.height-200,controls_btn_image,None,1)
         plus_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\plusbtn.png")
         self.plus_music_button=Button(self.screen.width/2-200,120,plus_btn_image,None,1)
         minus_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\minusbtn.png")
@@ -38,6 +42,12 @@ class Start_menu():
 
         self.plus_sfx_button=Button(self.screen.width/2-200,350,plus_btn_image,None,1)
         self.minus_sfx_button=Button(self.screen.width/2+200,350,minus_btn_image,None,1)
+
+    def create_control_display(self):
+        back_btn_image=pygame.image.load(f"assets\\Images\\menuitems\\backbtn.png")
+        self.controls_back_button=Button(self.screen.width/2,self.screen.height-70,back_btn_image,None,1)
+        controls_img=pygame.image.load(f"assets\\Images\\menuitems\\controlspanel.png")
+        self.controls_img=pygame.transform.scale(controls_img,(int(controls_img.width),int(controls_img.height)))
         
     def draw_text(self,text,x,y):
         img=self.font.render(text,True,self.text_colour)
@@ -52,34 +62,41 @@ class Start_menu():
             if self.quit_button.draw(self.screen):
                 return "quit"
         else:
-            self.draw_text("Music volume",self.screen.width/2-300,0)
-            if self.plus_music_button.draw(self.screen):
-                if(self.music_volume_number<10):
-                    self.music_volume_number+=1
-                    new_volume=float(self.music_volume_number/10)
-                    self.sm.Change_music_volume(new_volume)
-            if self.minus_music_button.draw(self.screen):
-                if(self.music_volume_number>0):
-                    self.music_volume_number-=1
-                    new_volume=float(self.music_volume_number/10)
-                    self.sm.Change_music_volume(new_volume)
-            self.draw_text(f"{self.music_volume_number}",self.screen.width/2-50,80)
-            
-            self.draw_text("SFX volume",self.screen.width/2-300,230)
-            if self.plus_sfx_button.draw(self.screen):
-                if(self.sfx_volume_number<10):
-                    self.sfx_volume_number+=1
-                    new_volume=float(self.sfx_volume_number/10)
-                    self.sm.Change_sfx_volume(new_volume)
-            if self.minus_sfx_button.draw(self.screen):
-                if(self.sfx_volume_number>0):
-                    self.sfx_volume_number-=1
-                    new_volume=float(self.sfx_volume_number/10)
-                    self.sm.Change_sfx_volume(new_volume)
-            self.draw_text(f"{self.sfx_volume_number}",self.screen.width/2-50,310)
+            if self.showing_controls==True:
+                self.screen.blit(self.controls_img,(140,0))
+                if self.controls_back_button.draw(self.screen):
+                    self.showing_controls=False
+            else:
+                self.draw_text("Music volume",self.screen.width/2-300,0)
+                if self.plus_music_button.draw(self.screen):
+                    if(self.music_volume_number<10):
+                        self.music_volume_number+=1
+                        new_volume=float(self.music_volume_number/10)
+                        self.sm.Change_music_volume(new_volume)
+                if self.minus_music_button.draw(self.screen):
+                    if(self.music_volume_number>0):
+                        self.music_volume_number-=1
+                        new_volume=float(self.music_volume_number/10)
+                        self.sm.Change_music_volume(new_volume)
+                self.draw_text(f"{self.music_volume_number}",self.screen.width/2-50,80)
+                
+                self.draw_text("SFX volume",self.screen.width/2-300,230)
+                if self.plus_sfx_button.draw(self.screen):
+                    if(self.sfx_volume_number<10):
+                        self.sfx_volume_number+=1
+                        new_volume=float(self.sfx_volume_number/10)
+                        self.sm.Change_sfx_volume(new_volume)
+                if self.minus_sfx_button.draw(self.screen):
+                    if(self.sfx_volume_number>0):
+                        self.sfx_volume_number-=1
+                        new_volume=float(self.sfx_volume_number/10)
+                        self.sm.Change_sfx_volume(new_volume)
+                self.draw_text(f"{self.sfx_volume_number}",self.screen.width/2-50,310)
+                if self.controls_button.draw(self.screen):
+                    self.showing_controls=True
 
-            if self.back_button.draw(self.screen):
-                self.showing_options=False
+                if self.back_button.draw(self.screen):
+                    self.showing_options=False
 
 class End_menu():
     #singleton code; creates a new instance if none exist, otherwise returns the instance
