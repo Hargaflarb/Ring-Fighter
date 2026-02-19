@@ -6,6 +6,7 @@ from Environment.FallTrigger import Fall_trigger
 from Components import Colider
 from Components import SpriteRenderer
 from MatchData import Match_data
+from random import Random
 import pygame
 
 
@@ -16,10 +17,16 @@ class Game_manager():
         self._rounds_won = [0,0]
 
         self._current_match = -1
+
+
+        ran = Random()
+        player = ran.choice(["Echo", "Emma", "Malthe"])
+
         self._match_datas = []
-        self._match_datas.append(Match_data(self._game_world, "some type", "Echo","Emma"))
-        self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
-        self._match_datas.append(Match_data(self._game_world, "some type", "some type","some type"))
+        self._match_datas.append(Match_data(self._game_world, "some type", player,"Echo"))
+        self._match_datas.append(Match_data(self._game_world, "some type", player,"Malthe"))
+        self._match_datas.append(Match_data(self._game_world, "some type", player,"Emma"))
+
 
     def End_round(self, winner): #1 = player, 2 = enemy
         if winner == 1: # player
