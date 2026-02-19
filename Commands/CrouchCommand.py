@@ -16,6 +16,9 @@ class Crouch_command(Command):
         if (not is_repeated) & self.Pass_filter(self._player.input_filter):
             self._player.Crouch_toggle()
             
+            # plays animation (moved to crouch_toggle)
+            #self._player.asset_pack.Play_Crouch_Animation()
+
             # tells character that an action has been made
             self._player.Action_notification()
 

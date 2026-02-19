@@ -6,6 +6,7 @@ from Environment.FallTrigger import Fall_trigger
 from Components import Colider
 from Components import SpriteRenderer
 from MatchData import Match_data
+from random import Random
 from Game_states import Game_States
 from SoundManager import SoundManager
 import pygame
@@ -19,6 +20,7 @@ class Game_manager():
         self._score=0
         player=None
         self._current_match = -1
+
         self._match_datas = []
     
     @property

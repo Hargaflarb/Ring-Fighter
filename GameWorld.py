@@ -97,7 +97,7 @@ class Game_World:
             
             self.Collision()
 
-            delta_time=self.clock.tick(60)/1000.0
+            delta_time=self.clock.tick(100)/1000.0
 
             #background colour
             self.screen.fill("cornflowerblue")
@@ -139,7 +139,7 @@ class Game_World:
             #draws to screen
             pygame.display.flip()
 
-            self.clock.tick(60)
+            self.clock.tick(100)
         
         pygame.quit()
 
@@ -193,8 +193,8 @@ class Game_World:
         sm.Add_sfx("EchoSA","Echo\\Echo_attack.mp3",1)
         sm.Add_sfx("EchoR","Echo\\Echo_ranged.mp3",1)
         sm.Add_sfx("EchoF","Echo\\Echo_fall.mp3",1)
-        sm.Add_sfx("EchoH","Echo\\Echo_hit.mp3",1)
-        sm.Add_sfx("EchoH","Echo\\Echo_hit2.mp3",1)
+        sm.Add_sfx("EchoH1","Echo\\Echo_hit.mp3",1)
+        sm.Add_sfx("EchoH2","Echo\\Echo_hit2.mp3",1)
         sm.Add_sfx("EchoT1","Echo\\Echo_taunt1.mp3",1)
         sm.Add_sfx("EchoT2","Echo\\Echo_taunt2.mp3",1)
 
