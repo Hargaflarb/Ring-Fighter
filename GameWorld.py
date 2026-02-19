@@ -13,19 +13,22 @@ from Environment.Void import Void
 from SoundManager import SoundManager
 from Event import Event
 from Menu import Start_menu
-from Menu import Button
+from Menu import End_menu
+from Menu import Character_select_menu
 from GameManager import Game_manager
+from Game_states import Game_States
 
 class Game_World:
     def __init__(self)->None:
         pygame.init()
+        pygame.display.set_caption('Ring Fighter')
         self.screen=pygame.display.set_mode((1280,720))
         self.running=True
         self.clock=pygame.time.Clock()
         self.game_manager = Game_manager(self)
-        #toggle this if you don't want the main menu showing up
-        self.showing_menu=False
         self._events = {}
+         #toggle this if you don't want the main menu showing up
+        self.game_state=Game_States.Main_menu
 
         self.active_game_objects=[]
         self.game_objects_to_add=[]
@@ -40,9 +43,12 @@ class Game_World:
         
         
         self.start_menu= Start_menu(self.screen)
+        self.end_menu=End_menu(self.screen,self.game_manager)
+        self.character_select_menu=Character_select_menu(self.screen)
+        self.selected_character=None
 
         self.Add_SFX()
-
+        self.Add_Music()
         # sm=SoundManager()
         # sm.Add_sfx("Ding","ding-36029.mp3",0.5)
         # sm.Add_music("spk","The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
@@ -51,13 +57,21 @@ class Game_World:
         # sm2=SoundManager()
         #sm2.Stop_music()
 
+    @property
+    def game_state(self):
+        return self._game_state
+        
+    @game_state.setter
+    def game_state(self,value):
+        self._game_state=value
+
 
     @property
     def Screen(self):
             return self.screen
             
     def Awake(self):
-        self.game_manager.Start_game()
+        
         for gameobject in self.active_game_objects:
             gameobject.Awake()
     def Start(self):
@@ -86,18 +100,37 @@ class Game_World:
             delta_time=self.clock.tick(100)/1000.0
 
             #background colour
-            self.screen.fill("green")
+            self.screen.fill("cornflowerblue")
 
             #add things to draw
             #basic state, can be removed later
-            if self.showing_menu:
+            if self._game_state==Game_States.Main_menu:
                 #also add menu background here
                 returned_string=self.start_menu.draw_menu()
                 if returned_string=="start":
-                    self.showing_menu=False
+                    self._game_state=Game_States.Character_select
                 elif returned_string=="quit":
                     self.running=False
-            else:
+            elif self._game_state==Game_States.Character_select:
+                returned_string=self.character_select_menu.draw_menu()
+                if ((returned_string=="Echo") or (returned_string=="Emma") or (returned_string=="Malthe")):
+                    self.selected_character=returned_string
+                    print(f"character: {returned_string}")
+                    self.game_manager.Start_game(returned_string)
+                elif returned_string=="main_menu":
+                    self._game_state=Game_States.Main_menu
+            elif self._game_state==Game_States.End_screen_win or self._game_state==Game_States.End_screen_lose:
+                returned_string=""
+                if self._game_state==Game_States.End_screen_lose:
+                    returned_string=self.end_menu.draw_menu(False)
+                else:
+                    returned_string=self.end_menu.draw_menu(True)
+                if returned_string=="main_menu":
+                    self._game_state=Game_States.Main_menu
+                elif returned_string=="restart":
+                    self.game_manager._score=0
+                    self.game_manager.Start_game(self.selected_character)
+            elif self._game_state==Game_States.Gameplay:
                 for gameobject in self.active_game_objects:
                     gameobject.Update(delta_time)
                 self.draw_text(self.game_manager.Get_rounds_won_string(),(0,0,0), pygame.font.SysFont("arialblack",60), 640, 100)
@@ -115,7 +148,7 @@ class Game_World:
             for j in range(i + 1, len(self.active_game_objects)):
                     col1 = obj1.Get_component("Colider")
                     col2 = self.active_game_objects[j].Get_component("Colider")
-                    if (col1 != None) & (col2 != None): # both has coliders
+                    if (col1 != None) & (col2 != None): # both have coliders
                         if (col1.Check_Touch(col2)): # does colide
                             col1.On_collision(col2)
                             col2.On_collision(col1)
@@ -132,38 +165,45 @@ class Game_World:
 
     def Add_SFX(self):
         sm = SoundManager.instance
-        sm.Add_sfx("EmmaDS","Emma\\emma down smash.mp3",0.5)
-        sm.Add_sfx("EmmaLA","Emma\\emma low attack.mp3",0.5)
-        #sm.Add_sfx("EmmaUS","Emma\\emma up smash.mp3",0.5)
-        sm.Add_sfx("EmmaSA","Emma\\emma standard attack.mp3",0.5)
-        sm.Add_sfx("EmmaR","Emma\\emma ranged.mp3",0.5)
-        sm.Add_sfx("EmmaF","Emma\\emma fall.mp3",0.5)
-        sm.Add_sfx("EmmaH1","Emma\\emma hit 1.mp3",0.5)
-        sm.Add_sfx("EmmaH2","Emma\\emma hit 2.mp3",0.5)
-        sm.Add_sfx("EmmaT1","Emma\\emma taunt 1.mp3",0.5)
-        sm.Add_sfx("EmmaT2","Emma\\emma taunt 2.mp3",0.5)
+        sm.Add_sfx("EmmaDS","Emma\\emma down smash.mp3",1)
+        sm.Add_sfx("EmmaLA","Emma\\emma low attack.mp3",1)
+        #sm.Add_sfx("EmmaUS","Emma\\emma up smash.mp3",1)
+        sm.Add_sfx("EmmaSA","Emma\\emma standard attack.mp3",1)
+        sm.Add_sfx("EmmaR","Emma\\emma ranged.mp3",1)
+        sm.Add_sfx("EmmaF","Emma\\emma fall.mp3",1)
+        sm.Add_sfx("EmmaH1","Emma\\emma hit 1.mp3",1)
+        sm.Add_sfx("EmmaH2","Emma\\emma hit 2.mp3",1)
+        sm.Add_sfx("EmmaT1","Emma\\emma taunt 1.mp3",1)
+        sm.Add_sfx("EmmaT2","Emma\\emma taunt 2.mp3",1)
 
-        sm.Add_sfx("MaltheDS","Malthe\\DownSmash8k16.mp3",0.5)
-        sm.Add_sfx("MaltheLA","Malthe\\LowAttack8k16.mp3",0.5)
-        #sm.Add_sfx("MaltheUS","Malthe\\UpSmash8k16.mp3",0.5)
-        sm.Add_sfx("MaltheSA","Malthe\\StandardAttack8k16.mp3",0.5)
-        sm.Add_sfx("MaltheR","Malthe\\Ranged8k24.mp3",0.5)
-        sm.Add_sfx("MaltheF","Malthe\\Fall8k16.mp3",0.5)
-        sm.Add_sfx("MaltheH1","Malthe\\Hit8k16.mp3",0.5)
-        sm.Add_sfx("MaltheH2","Malthe\\Hit2nd8k16.mp3",0.5)
-        sm.Add_sfx("MaltheT1","Malthe\\Taunt8k16.mp3",0.5)
-        sm.Add_sfx("MaltheT2","Malthe\\Taunt2nd8k16.mp3",0.5)
+        sm.Add_sfx("MaltheDS","Malthe\\DownSmash8k16.mp3",1)
+        sm.Add_sfx("MaltheLA","Malthe\\LowAttack8k16.mp3",1)
+        #sm.Add_sfx("MaltheUS","Malthe\\UpSmash8k16.mp3",1)
+        sm.Add_sfx("MaltheSA","Malthe\\StandardAttack8k16.mp3",1)
+        sm.Add_sfx("MaltheR","Malthe\\Ranged8k24.mp3",1)
+        sm.Add_sfx("MaltheF","Malthe\\Fall8k16.mp3",1)
+        sm.Add_sfx("MaltheH1","Malthe\\Hit8k16.mp3",1)
+        sm.Add_sfx("MaltheH2","Malthe\\Hit2nd8k16.mp3",1)
+        sm.Add_sfx("MaltheT1","Malthe\\Taunt8k16.mp3",1)
+        sm.Add_sfx("MaltheT2","Malthe\\Taunt2nd8k16.mp3",1)
 
-        sm.Add_sfx("EchoDS","Echo\\Echo_downsmash.mp3",0.5)
-        sm.Add_sfx("EchoLA","Echo\\Echo_crouchattack.mp3",0.5)
-        #sm.Add_sfx("EchoUS","Echo\\Echo up smash.mp3",0.5)
-        sm.Add_sfx("EchoSA","Echo\\Echo_attack.mp3",0.5)
-        sm.Add_sfx("EchoR","Echo\\Echo_ranged.mp3",0.5)
-        sm.Add_sfx("EchoF","Echo\\Echo_fall.mp3",0.5)
-        sm.Add_sfx("EchoH1","Echo\\Echo_hit.mp3",0.5)
-        sm.Add_sfx("EchoH2","Echo\\Echo_hit2.mp3",0.5)
-        sm.Add_sfx("EchoT1","Echo\\Echo_taunt1.mp3",0.5)
-        sm.Add_sfx("EchoT2","Echo\\Echo_taunt2.mp3",0.5)
+        sm.Add_sfx("EchoDS","Echo\\Echo_downsmash.mp3",1)
+        sm.Add_sfx("EchoLA","Echo\\Echo_crouchattack.mp3",1)
+        #sm.Add_sfx("EchoUS","Echo\\Echo up smash.mp3",1)
+        sm.Add_sfx("EchoSA","Echo\\Echo_attack.mp3",1)
+        sm.Add_sfx("EchoR","Echo\\Echo_ranged.mp3",1)
+        sm.Add_sfx("EchoF","Echo\\Echo_fall.mp3",1)
+        sm.Add_sfx("EchoH1","Echo\\Echo_hit.mp3",1)
+        sm.Add_sfx("EchoH2","Echo\\Echo_hit2.mp3",1)
+        sm.Add_sfx("EchoT1","Echo\\Echo_taunt1.mp3",1)
+        sm.Add_sfx("EchoT2","Echo\\Echo_taunt2.mp3",1)
+
+    def Add_Music(self):
+        sm = SoundManager.instance
+        sm.Add_music("fighting","upbeat background music 2.mp3",0.5)
+        sm.Add_music("lose","sad music.mp3",0.5)
+        sm.Add_music("win","victory music.mp3",0.5)
+        sm.Play_music("fighting")
 
     def Make_event(self, name):
         new_event = Event()

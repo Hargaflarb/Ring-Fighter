@@ -1,5 +1,4 @@
 from GameObject import GameObject
-
 class Attack(GameObject):
     def __init__(self, game_world, character, attack_data):
         t = character.transform
