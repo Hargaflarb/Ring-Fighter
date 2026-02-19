@@ -21,6 +21,7 @@ from Game_states import Game_States
 class Game_World:
     def __init__(self)->None:
         pygame.init()
+        pygame.display.set_caption('Ring Fighter')
         self.screen=pygame.display.set_mode((1280,720))
         self.running=True
         self.clock=pygame.time.Clock()
