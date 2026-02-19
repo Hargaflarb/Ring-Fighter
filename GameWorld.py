@@ -126,7 +126,7 @@ class Game_World:
                 if returned_string=="main_menu":
                     self._game_state=Game_States.Main_menu
                 elif returned_string=="restart":
-                    self.game_manager.Score=0
+                    self.game_manager._score=0
                     self.game_manager.Start_game()
             elif self._game_state==Game_States.Gameplay:
                 for gameobject in self.active_game_objects:

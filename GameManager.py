@@ -69,6 +69,7 @@ class Game_manager():
         print("new game started")
         self._game_world.Restart_game()
         self._current_match = -1
+        self._score=0
         self._game_world.game_state=Game_States.Gameplay
         self.Next_match()
 
