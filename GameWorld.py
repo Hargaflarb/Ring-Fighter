@@ -83,7 +83,7 @@ class Game_World:
             
             self.Collision()
 
-            delta_time=self.clock.tick(60)/1000.0
+            self.delta_time=self.clock.tick(60)/1000.0
 
             #background colour
             self.screen.fill("green")
@@ -99,7 +99,7 @@ class Game_World:
                     self.running=False
             else:
                 for gameobject in self.active_game_objects:
-                    gameobject.Update(delta_time)
+                    gameobject.Update(self.delta_time)
                 self.draw_text(self.game_manager.Get_rounds_won_string(),(0,0,0), pygame.font.SysFont("arialblack",60), 640, 100)
             
             
@@ -134,7 +134,6 @@ class Game_World:
         sm = SoundManager.instance
         sm.Add_sfx("EmmaDS","Emma\\emma down smash.mp3",0.5)
         sm.Add_sfx("EmmaLA","Emma\\emma low attack.mp3",0.5)
-        #sm.Add_sfx("EmmaUS","Emma\\emma up smash.mp3",0.5)
         sm.Add_sfx("EmmaSA","Emma\\emma standard attack.mp3",0.5)
         sm.Add_sfx("EmmaR","Emma\\emma ranged.mp3",0.5)
         sm.Add_sfx("EmmaF","Emma\\emma fall.mp3",0.5)
@@ -145,7 +144,6 @@ class Game_World:
 
         sm.Add_sfx("MaltheDS","Malthe\\DownSmash8k16.mp3",0.5)
         sm.Add_sfx("MaltheLA","Malthe\\LowAttack8k16.mp3",0.5)
-        #sm.Add_sfx("MaltheUS","Malthe\\UpSmash8k16.mp3",0.5)
         sm.Add_sfx("MaltheSA","Malthe\\StandardAttack8k16.mp3",0.5)
         sm.Add_sfx("MaltheR","Malthe\\Ranged8k24.mp3",0.5)
         sm.Add_sfx("MaltheF","Malthe\\Fall8k16.mp3",0.5)
@@ -156,12 +154,11 @@ class Game_World:
 
         sm.Add_sfx("EchoDS","Echo\\Echo_downsmash.mp3",0.5)
         sm.Add_sfx("EchoLA","Echo\\Echo_crouchattack.mp3",0.5)
-        #sm.Add_sfx("EchoUS","Echo\\Echo up smash.mp3",0.5)
         sm.Add_sfx("EchoSA","Echo\\Echo_attack.mp3",0.5)
         sm.Add_sfx("EchoR","Echo\\Echo_ranged.mp3",0.5)
         sm.Add_sfx("EchoF","Echo\\Echo_fall.mp3",0.5)
-        sm.Add_sfx("EchoH","Echo\\Echo_hit.mp3",0.5)
-        sm.Add_sfx("EchoH","Echo\\Echo_hit2.mp3",0.5)
+        sm.Add_sfx("EchoH1","Echo\\Echo_hit.mp3",0.5)
+        sm.Add_sfx("EchoH2","Echo\\Echo_hit2.mp3",0.5)
         sm.Add_sfx("EchoT1","Echo\\Echo_taunt1.mp3",0.5)
         sm.Add_sfx("EchoT2","Echo\\Echo_taunt2.mp3",0.5)
 

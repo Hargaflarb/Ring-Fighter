@@ -16,15 +16,14 @@ from Components import Input_Handler
 
 class Player(Character):
     def __init__(self, game_world, position, scale, direction, character_name):
-        super().__init__(game_world, position, scale, character_name)
+        super().__init__(game_world, position, scale, direction, character_name)
 
-        self.input_filter = []
         self.sr = self.Add_component(Components.SpriteRenderer("Echo\\EchoIdle\\echo idle 6.png"))
         input_handler = self.Add_component(Input_Handler(self))
         self._screen_size = pygame.math.Vector2(game_world.Screen.get_width(), game_world.screen.get_height())
         self._sprite_size = pygame.math.Vector2(self.sr.sprite_image.get_width(), self.sr.sprite_image.get_height())
         self.game_world = game_world
-        self._direction = direction
+
         self.sr.Flip(self.sr.sprite_image, self._direction)
         
         # movement

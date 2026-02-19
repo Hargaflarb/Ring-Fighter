@@ -3,19 +3,25 @@ from abc import ABC
 from CharacterSoundPack import Character_sound_pack
 
 class Character(GameObject):
-    def __init__(self, game_world, position, scale, character_name):
+    def __init__(self, game_world, position, scale, direction, character_name):
         super().__init__(game_world, position, scale)
+        self.input_filter = []
         self._crouching = False
         self._blocking = False
         self._character_name = character_name
         self._sound_pack = Character_sound_pack(self._character_name)
         self._time_since_action = 0 # used for taunt
         self._taunt_wait_time = 7
+        self._direction = direction
 
 
     @property
     def crouching(self):
         return self._crouching
+    
+    @property
+    def direction(self):
+        return self._direction
     
     @property
     def blocking(self):
