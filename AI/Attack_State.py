@@ -16,11 +16,11 @@ class Attack_State(State):
         self.move_command = MoveCommand(self._obj, pygame.math.Vector2(-1,0), self._obj._speed)
         self.crouch_command = Crouch_command(self._obj)
 
-        self.standard_attack = Attack_command(self._obj, self._obj.direction, self._obj.game_world.attack_types["standard_attack"], False)
-        self.down_attack = Attack_command(self._obj, self._obj.direction, self._obj.game_world.attack_types["down_attack"], False)
-        self.up_attack = Attack_command(self._obj, self._obj.direction, self._obj.game_world.attack_types["up_attack"], False)
-        self.low_attack = Attack_command(self._obj, self._obj.direction, self._obj.game_world.attack_types["low_attack"], True)
-        self.ranged_attack = Attack_command(self._obj, self._obj.direction, self._obj.game_world.attack_types["ranged_attack"], False)
+        self.standard_attack = Attack_command(self._obj, self._obj.direction, self._obj.attack_types["standard_attack"], False)
+        self.down_attack = Attack_command(self._obj, self._obj.direction, self._obj.attack_types["down_attack"], False)
+        self.up_attack = Attack_command(self._obj, self._obj.direction, self._obj.attack_types["up_attack"], False)
+        self.low_attack = Attack_command(self._obj, self._obj.direction, self._obj.attack_types["low_attack"], True)
+        self.ranged_attack = Attack_command(self._obj, self._obj.direction, self._obj.attack_types["ranged_attack"], False)
         self.block_command = Block_command(self._obj)
         self.countdown = 0
 

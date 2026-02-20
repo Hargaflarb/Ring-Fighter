@@ -13,8 +13,8 @@ import pygame
 
 
 class Enemy(Character):
-    def __init__(self, game_world, position, scale, direction, opponent, character_name):
-        super().__init__(game_world, position, scale, direction, character_name)
+    def __init__(self, game_world, position, scale, direction, opponent, character_name, difficulty):
+        super().__init__(game_world, position, scale, direction, character_name, difficulty)
 
         self._speed = 250
         self._opponent = opponent

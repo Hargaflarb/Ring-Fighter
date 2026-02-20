@@ -33,13 +33,6 @@ class Game_World:
         self.active_game_objects=[]
         self.game_objects_to_add=[]
         self.game_objects_to_remove=[]
-
-        self.attack_types = {}
-        self.attack_types["standard_attack"] = Attack_Data(Attack_type.StandardAttack, (0.1,0.2,0.1), (50,30), (-100,-180), (100,0), False)
-        self.attack_types["low_attack"] = Attack_Data(Attack_type.LowAttack, (0.5,0.2,0.3), (50,40), (-80,0), (350,0), True)
-        self.attack_types["down_attack"] = Attack_Data(Attack_type.DownSmash, (0.2,0.1,0.8), (40,110), (-65,-60), (350,0), False)
-        self.attack_types["up_attack"] = Attack_Data(Attack_type.UpSmash, (0.3,0.2,0.3), (40,70), (-80,-65), (200,100), False)
-        self.attack_types["ranged_attack"] = Attack_Data(Attack_type.Ranged, (0.7,0.0,0.8), (50,50), (-80,-180), (100,0), False)
         
         
         self.start_menu= Start_menu(self.screen)

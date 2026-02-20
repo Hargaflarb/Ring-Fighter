@@ -11,7 +11,7 @@ class Idle_State(State):
         self._opponent = opponent
         self._obj = obj
         self.move_command = MoveCommand(self._obj, pygame.math.Vector2(-1,0), self._obj._speed)
-        self.ranged_attack = Attack_command(self._obj, self._obj.direction, self._obj.game_world.attack_types["ranged_attack"], False)
+        self.ranged_attack = Attack_command(self._obj, self._obj.direction, self._obj.attack_types["ranged_attack"], False)
 
     def Execute(self, delta_time):
         self.move_command.Execute(True, delta_time)

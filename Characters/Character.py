@@ -5,9 +5,11 @@ from CharacterAssetsPack import Character_assets_pack
 from random import Random
 from abc import ABC
 import pygame
+from Attacks.AttackData import Attack_Data
+from Attacks.AttackType import Attack_type
 
 class Character(GameObject):
-    def __init__(self, game_world, position, scale, direction, character_name):
+    def __init__(self, game_world, position, scale, direction, character_name, difficulty):
         super().__init__(game_world, position, scale)
         self._random = Random()
         self._crouching = False
@@ -20,6 +22,24 @@ class Character(GameObject):
         sr = self.Add_component(SpriteRenderer("Malthe\MaltheIdle\malthe idle 4.png"))
         self._sprite_size = pygame.math.Vector2(sr.sprite_image.get_width(), sr.sprite_image.get_height())
         self.Add_component(Animator(sr))
+        
+        damage_mod = 1
+
+        if difficulty == "Easy":
+            damage_mod = 1
+        elif difficulty == "Normal":
+            damage_mod = 2
+        elif difficulty == "Boss":
+            damage_mod = 3
+        else:
+            damage_mod = 1
+
+        self.attack_types = {}
+        self.attack_types["standard_attack"] = Attack_Data(Attack_type.StandardAttack, (0.1,0.2,0.1), (50,30), (-100,-180), (damage_mod*100,0), False)
+        self.attack_types["low_attack"] = Attack_Data(Attack_type.LowAttack, (0.5,0.2,0.3), (50,40), (-80,0), (damage_mod*350,0), True)
+        self.attack_types["down_attack"] = Attack_Data(Attack_type.DownSmash, (0.2,0.1,0.8), (40,110), (-65,-60), (damage_mod*350,0), False)
+        self.attack_types["up_attack"] = Attack_Data(Attack_type.UpSmash, (0.3,0.2,0.3), (40,70), (-80,-65), (200,100), False)
+        self.attack_types["ranged_attack"] = Attack_Data(Attack_type.Ranged, (0.7,0.0,0.8), (50,50), (-80,-180), (damage_mod*100,0), False)
 
         
         sr.Flip(sr.sprite_image, self._direction)

@@ -15,8 +15,8 @@ from Components import Input_Handler
 
 
 class Player(Character):
-    def __init__(self, game_world, position, scale, direction, character_name):
-        super().__init__(game_world, position, scale, direction, character_name)
+    def __init__(self, game_world, position, scale, direction, character_name, difficulty):
+        super().__init__(game_world, position, scale, direction, character_name, difficulty)
         input_handler = self.Add_component(Input_Handler(self))
         self._screen_size = pygame.math.Vector2(game_world.Screen.get_width(), game_world.screen.get_height())
         self.game_world = game_world
@@ -31,12 +31,12 @@ class Player(Character):
         input_handler.Add_Command(pygame.K_SPACE, Block_command(self))
         
         # attacks
-        standard_attack = Attack_command(self, self.transform.facing, game_world.attack_types["standard_attack"], False)
-        low_attack = Attack_command(self, self.transform.facing, game_world.attack_types["low_attack"], True)
+        standard_attack = Attack_command(self, self.transform.facing, self.attack_types["standard_attack"], False)
+        low_attack = Attack_command(self, self.transform.facing, self.attack_types["low_attack"], True)
         input_handler.Add_Command(pygame.K_j, Multi_command(low_attack, standard_attack, lambda: self.crouching))
-        input_handler.Add_Command(pygame.K_k, Attack_command(self, self.transform.facing, game_world.attack_types["down_attack"], False))
+        input_handler.Add_Command(pygame.K_k, Attack_command(self, self.transform.facing, self.attack_types["down_attack"], False))
         # input_handler.Add_Command(pygame.K_l, Attack_command(self, self.transform.facing, game_world.attack_types["up_attack"], False))
-        input_handler.Add_Command(pygame.K_h, Attack_command(self, self.transform.facing, game_world.attack_types["ranged_attack"], False))
+        input_handler.Add_Command(pygame.K_h, Attack_command(self, self.transform.facing, self.attack_types["ranged_attack"], False))
 
         self.Add_component(Momentum())
         self.Add_component(Gravity())
