@@ -40,6 +40,10 @@ class Character(GameObject):
         return self._crouching
     
     @property
+    def direction(self):
+        return self._direction
+    
+    @property
     def blocking(self):
         return self._blocking
    

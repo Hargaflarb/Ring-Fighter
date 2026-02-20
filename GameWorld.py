@@ -97,7 +97,7 @@ class Game_World:
             
             self.Collision()
 
-            delta_time=self.clock.tick(100)/1000.0
+            self.delta_time=self.clock.tick(60)/1000.0
 
             #background colour
             self.screen.fill("cornflowerblue")
@@ -132,7 +132,7 @@ class Game_World:
                     self.game_manager.Start_game(self.selected_character)
             elif self._game_state==Game_States.Gameplay:
                 for gameobject in self.active_game_objects:
-                    gameobject.Update(delta_time)
+                    gameobject.Update(self.delta_time)
                 self.draw_text(self.game_manager.Get_rounds_won_string(),(0,0,0), pygame.font.SysFont("arialblack",60), 640, 100)
             
             
@@ -165,38 +165,36 @@ class Game_World:
 
     def Add_SFX(self):
         sm = SoundManager.instance
-        sm.Add_sfx("EmmaDS","Emma\\emma down smash.mp3",1)
-        sm.Add_sfx("EmmaLA","Emma\\emma low attack.mp3",1)
-        #sm.Add_sfx("EmmaUS","Emma\\emma up smash.mp3",1)
-        sm.Add_sfx("EmmaSA","Emma\\emma standard attack.mp3",1)
-        sm.Add_sfx("EmmaR","Emma\\emma ranged.mp3",1)
-        sm.Add_sfx("EmmaF","Emma\\emma fall.mp3",1)
-        sm.Add_sfx("EmmaH1","Emma\\emma hit 1.mp3",1)
-        sm.Add_sfx("EmmaH2","Emma\\emma hit 2.mp3",1)
-        sm.Add_sfx("EmmaT1","Emma\\emma taunt 1.mp3",1)
-        sm.Add_sfx("EmmaT2","Emma\\emma taunt 2.mp3",1)
 
-        sm.Add_sfx("MaltheDS","Malthe\\DownSmash8k16.mp3",1)
-        sm.Add_sfx("MaltheLA","Malthe\\LowAttack8k16.mp3",1)
-        #sm.Add_sfx("MaltheUS","Malthe\\UpSmash8k16.mp3",1)
-        sm.Add_sfx("MaltheSA","Malthe\\StandardAttack8k16.mp3",1)
-        sm.Add_sfx("MaltheR","Malthe\\Ranged8k24.mp3",1)
-        sm.Add_sfx("MaltheF","Malthe\\Fall8k16.mp3",1)
-        sm.Add_sfx("MaltheH1","Malthe\\Hit8k16.mp3",1)
-        sm.Add_sfx("MaltheH2","Malthe\\Hit2nd8k16.mp3",1)
-        sm.Add_sfx("MaltheT1","Malthe\\Taunt8k16.mp3",1)
-        sm.Add_sfx("MaltheT2","Malthe\\Taunt2nd8k16.mp3",1)
+        sm.Add_sfx("EmmaDS","Emma\\emma down smash.mp3",0.5)
+        sm.Add_sfx("EmmaLA","Emma\\emma low attack.mp3",0.5)
+        sm.Add_sfx("EmmaSA","Emma\\emma standard attack.mp3",0.5)
+        sm.Add_sfx("EmmaR","Emma\\emma ranged.mp3",0.5)
+        sm.Add_sfx("EmmaF","Emma\\emma fall.mp3",0.5)
+        sm.Add_sfx("EmmaH1","Emma\\emma hit 1.mp3",0.5)
+        sm.Add_sfx("EmmaH2","Emma\\emma hit 2.mp3",0.5)
+        sm.Add_sfx("EmmaT1","Emma\\emma taunt 1.mp3",0.5)
+        sm.Add_sfx("EmmaT2","Emma\\emma taunt 2.mp3",0.5)
 
-        sm.Add_sfx("EchoDS","Echo\\Echo_downsmash.mp3",1)
-        sm.Add_sfx("EchoLA","Echo\\Echo_crouchattack.mp3",1)
-        #sm.Add_sfx("EchoUS","Echo\\Echo up smash.mp3",1)
-        sm.Add_sfx("EchoSA","Echo\\Echo_attack.mp3",1)
-        sm.Add_sfx("EchoR","Echo\\Echo_ranged.mp3",1)
-        sm.Add_sfx("EchoF","Echo\\Echo_fall.mp3",1)
-        sm.Add_sfx("EchoH1","Echo\\Echo_hit.mp3",1)
-        sm.Add_sfx("EchoH2","Echo\\Echo_hit2.mp3",1)
-        sm.Add_sfx("EchoT1","Echo\\Echo_taunt1.mp3",1)
-        sm.Add_sfx("EchoT2","Echo\\Echo_taunt2.mp3",1)
+        sm.Add_sfx("MaltheDS","Malthe\\DownSmash8k16.mp3",0.5)
+        sm.Add_sfx("MaltheLA","Malthe\\LowAttack8k16.mp3",0.5)
+        sm.Add_sfx("MaltheSA","Malthe\\StandardAttack8k16.mp3",0.5)
+        sm.Add_sfx("MaltheR","Malthe\\Ranged8k24.mp3",0.5)
+        sm.Add_sfx("MaltheF","Malthe\\Fall8k16.mp3",0.5)
+        sm.Add_sfx("MaltheH1","Malthe\\Hit8k16.mp3",0.5)
+        sm.Add_sfx("MaltheH2","Malthe\\Hit2nd8k16.mp3",0.5)
+        sm.Add_sfx("MaltheT1","Malthe\\Taunt8k16.mp3",0.5)
+        sm.Add_sfx("MaltheT2","Malthe\\Taunt2nd8k16.mp3",0.5)
+
+        sm.Add_sfx("EchoDS","Echo\\Echo_downsmash.mp3",0.5)
+        sm.Add_sfx("EchoLA","Echo\\Echo_crouchattack.mp3",0.5)
+        sm.Add_sfx("EchoSA","Echo\\Echo_attack.mp3",0.5)
+        sm.Add_sfx("EchoR","Echo\\Echo_ranged.mp3",0.5)
+        sm.Add_sfx("EchoF","Echo\\Echo_fall.mp3",0.5)
+        sm.Add_sfx("EchoH1","Echo\\Echo_hit.mp3",0.5)
+        sm.Add_sfx("EchoH2","Echo\\Echo_hit2.mp3",0.5)
+        sm.Add_sfx("EchoT1","Echo\\Echo_taunt1.mp3",0.5)
+        sm.Add_sfx("EchoT2","Echo\\Echo_taunt2.mp3",0.5)
 
     def Add_Music(self):
         sm = SoundManager.instance

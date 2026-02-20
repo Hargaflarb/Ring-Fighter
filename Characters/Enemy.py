@@ -30,10 +30,3 @@ class Enemy(Character):
         self.fsm.Add_Transition(type(Null_State(self, self._opponent)), AI_Conditions.Idle, Idle_State(self, self._opponent))
         self.fsm.Add_Transition(type(Idle_State(self, self._opponent)), AI_Conditions.Attack, Attack_State(self, self._opponent))
         self.fsm.Add_Transition(type(Attack_State(self, self._opponent)), AI_Conditions.Idle, Idle_State(self, self._opponent))
-        
-
-    def Move(self, direction, delta_time):
-        if direction != pygame.math.Vector2(0, 0):
-            direction.normalize
-        change = ((direction * self._speed))
-        self.transform.translate(change*delta_time)
