@@ -7,7 +7,7 @@ from abc import ABC
 import pygame
 
 class Character(GameObject):
-    def __init__(self, game_world, position, scale, direction, character_name):
+    def __init__(self, game_world, position, scale, direction, character_name, difficulty):
         super().__init__(game_world, position, scale)
         self._random = Random()
         self._crouching = False
@@ -33,6 +33,17 @@ class Character(GameObject):
         self._time_since_action = 0 # used for taunt
         self._taunt_wait_time = 10
         self.Reroll_taunt_time()
+
+        damage_mod = 1
+
+        if difficulty == "Easy":
+            damage_mod = 1
+        elif difficulty == "Normal":
+            damage_mod = 2
+        elif difficulty == "Boss":
+            damage_mod = 3
+        else:
+            damage_mod = 1
 
         
         self.attack_types = {}
