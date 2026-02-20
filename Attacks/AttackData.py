@@ -36,13 +36,13 @@ class Attack_Data():
             return Attack(game_world, character, self)
 
 
-    def Added_components(self, facing):
+    def Added_components(self, facing, asset_pack):
         components = []
         components.append(Colider((self._hitbox[0]/2,self._hitbox[1],self._hitbox[0]/2,0), 3))
 
         if self.type == Attack_type.Ranged:
             components.append(Momentum((self._ranged_speed * facing, 0)))
-            # components.append(SpriteRenderer("rangedsprite")) # this sprite name is not real, gotta figure out how to get the right sprite
+            components.append(SpriteRenderer(asset_pack.Get_projectile_sprite_name()))
 
         return components
 

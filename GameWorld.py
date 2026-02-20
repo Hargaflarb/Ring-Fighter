@@ -139,7 +139,7 @@ class Game_World:
             #draws to screen
             pygame.display.flip()
 
-            self.clock.tick(60)
+            self.clock.tick(100)
         
         pygame.quit()
 

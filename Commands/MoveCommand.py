@@ -18,7 +18,13 @@ class MoveCommand(Command):
                 self._direction.normalize
             change = ((self._direction * self._speed))
             self._player.transform.translate(change*delta_time)
-            self._player.Get_component("Transform").facing = -self._direction[0]
+            self._player.transform.facing = -self._direction[0]
+
+            if not is_repeated:
+                # plays animation
+                self._player.asset_pack.Play_Walk_Animation()
+                self._player.moving = True
+
             # tells character that an action has been made
             self._player.Action_notification()
     

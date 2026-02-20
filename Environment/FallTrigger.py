@@ -14,6 +14,7 @@ class Fall_trigger(GameObject):
 
     def OnCollision(self, other):
         if ((other.__class__.__name__ == "Player") | (other.__class__.__name__ == "Enemy")) & (other not in self._triggered_characters):
-            other.sound_pack.Play_Fall()
+            other.asset_pack.Play_Fall_SFX()
+            other.asset_pack.Play_Fall_Animation()
             self._triggered_characters.append(other)
             

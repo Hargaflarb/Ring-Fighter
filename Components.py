@@ -286,7 +286,8 @@ class SpriteRenderer(Component):
 
     def Update(self,delta_time):
         self._sprite.rect.topleft = self.Apply_sprite_offset(self.gameObject.transform.position)
-        self._game_world.Screen.blit(self._sprite_image,self._sprite.rect)
+        flipped_sprite = self.Flip(self._sprite_image, self.gameObject.transform.facing)
+        self._game_world.Screen.blit(flipped_sprite,self._sprite.rect)
 
     def Apply_sprite_offset(self, position):
         x = position[0] - (self.sprite_image.get_width()/2)
@@ -295,9 +296,9 @@ class SpriteRenderer(Component):
     
       
     def Flip(self, sprite, direction):
-        if direction == "right":
+        if direction == -1:
             flipped_image = pygame.transform.flip(sprite, True, False)  
-        elif direction == "left":
+        elif direction == 1:
             flipped_image = pygame.transform.flip(sprite, False, False)
         else:
             flipped_image = sprite
@@ -307,15 +308,17 @@ class SpriteRenderer(Component):
 
 
 class Animator(Component):
-    def __init__(self,spriterenderer):
+    def __init__(self, spriterenderer):
         super().__init__()
         self.current_index=0
         self.elapsed_time=0
         #change below to gameobject.getcomponent
         self._spriterenderer=spriterenderer
         self.animations={}
+        self.default_animation = None
         self.frame_speed=0.1
         self.current_animation=None
+        self._loop_current = True
 
     def Awake(self,game_world):
         pass
@@ -330,11 +333,15 @@ class Animator(Component):
         #switch to next frame
         if self.elapsed_time>=self.frame_speed:
             self.current_index+=1
-            if self.current_index >=len(self.current_animation):
-                self.current_index=0
+            self.elapsed_time -= self.frame_speed
+            if (self.current_index >= len(self.current_animation)):
+                if (self._loop_current):
+                    self.current_index=0
+                else:
+                    self.Stop_animation()
         
 
-    def Add_animation(self,animation_name,*args):
+    def Add_animation(self,animation_name, args):
         frames=[]
         for arg in args:
             #!make sure the asset is in the correct sub-folder!
@@ -342,7 +349,16 @@ class Animator(Component):
             frames.append(sprite)
         self.animations[animation_name]=frames
         
+    def Set_default_animation(self, animation_name):
+        self.default_animation = self.animations[animation_name]
 
-    def Play_animation(self,animation_name):
+
+    def Play_animation(self,animation_name, do_loop):
+        self.current_index = 0
+        self._loop_current = do_loop
         self.current_animation=self.animations[animation_name]
   
+    def Stop_animation(self):
+        self.current_index = 0
+        self._loop_current = True
+        self.current_animation=self.default_animation
