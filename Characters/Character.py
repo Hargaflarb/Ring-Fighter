@@ -77,6 +77,7 @@ class Character(GameObject):
 
         if (self._asset_pack.current_animation_ID == "W") & (not self._moving): # horrible solution but it works
             self._asset_pack.Play_Default_Animation()
+            print("not move")
         
         self._moving = False
 
