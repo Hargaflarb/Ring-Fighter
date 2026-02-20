@@ -252,10 +252,10 @@ class Colider(Component):
     def Start(self):
         pass
     def Update(self, delta_time):
-
+        pass
         # draw hitboxes
-        pygame.draw.rect(self._game_world.Screen, pygame.color.Color(255,0,0), pygame.rect.Rect(self.pos_sized_rect), 1)
-        pygame.draw.circle(self._game_world.Screen, pygame.color.Color(255,0,0), self.gameObject.transform.position, 1, 0)
+        # pygame.draw.rect(self._game_world.Screen, pygame.color.Color(255,0,0), pygame.rect.Rect(self.pos_sized_rect), 1)
+        # pygame.draw.circle(self._game_world.Screen, pygame.color.Color(255,0,0), self.gameObject.transform.position, 1, 0)
 
 
 class SpriteRenderer(Component):
