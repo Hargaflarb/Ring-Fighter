@@ -49,13 +49,7 @@ class Game_World:
 
         self.Add_SFX()
         self.Add_Music()
-        # sm=SoundManager()
-        # sm.Add_sfx("Ding","ding-36029.mp3",0.5)
-        # sm.Add_music("spk","The Oh Hellos - Soldier, Poet, King (Official Lyric Video).mp3",0.5)
-        #sm.Play_sfx("Ding")
-        # sm.Play_music("spk")
-        # sm2=SoundManager()
-        #sm2.Stop_music()
+
 
     @property
     def game_state(self):

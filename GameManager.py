@@ -60,12 +60,13 @@ class Game_manager():
     def Next_match(self):
         self._rounds_won = [0,0]
         self._current_match += 1
-        if self._current_match >= 2:
+        if self._current_match >= 3:
             print("player won the game")
             sm=SoundManager.instance
             sm.Play_music("win")
             self._game_world.game_state=Game_States.End_screen_win
         else:
+            self.Despawn_Arena()
             self.Set_up_arena()
             self.Next_round()
 
@@ -117,7 +118,11 @@ class Game_manager():
     def Despawn_Characters(self):
         for character in self._characters:
             self._game_world.game_objects_to_remove.append(character)
+        self._characters.clear()
 
+    def Despawn_Arena(self):
+        for object in self._game_world.active_game_objects:
+            self._game_world.game_objects_to_remove.append(object)
 
     def Get_rounds_won_string(self):
         return f"{self._rounds_won[0]} - {self._rounds_won[1]}"

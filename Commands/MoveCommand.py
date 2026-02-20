@@ -23,7 +23,7 @@ class MoveCommand(Command):
             if not is_repeated:
                 # plays animation
                 self._player.asset_pack.Play_Walk_Animation()
-                self._player.moving = True
+            self._player.moving = True
 
             # tells character that an action has been made
             self._player.Action_notification()
