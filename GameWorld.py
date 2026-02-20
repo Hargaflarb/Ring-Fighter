@@ -200,7 +200,7 @@ class Game_World:
         sm = SoundManager.instance
         sm.Add_music("fighting","upbeat background music 2.mp3",0.5)
         sm.Add_music("lose","sad music.mp3",1)
-        sm.Add_music("win","victory music.mp3",0.5)
+        sm.Add_music("win","victory music.mp3",1)
         sm.Play_music("fighting")
 
     def Make_event(self, name):
