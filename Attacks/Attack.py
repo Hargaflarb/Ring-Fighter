@@ -22,9 +22,11 @@ class Attack(GameObject):
     
     def Start(self):
         #play sound effect here
-        self.character.sound_pack.Play_attack_SFX(self.data.type)
+        self.character.asset_pack.Play_attack_SFX(self.data.type)
 
         #play windup animation here (for windup time/duration)
+        self.character.asset_pack.Play_attack_Animation(self.data.type, "doesn't matter rn")
+
         self._character.input_filter.append("attack")
         return super().Start()
 
@@ -50,7 +52,7 @@ class Attack(GameObject):
         #play hit animation
         #
         #adds colider and other components
-        for component in self.data.Added_components(self._facing):
+        for component in self.data.Added_components(self._facing, self.character.asset_pack):
             self.Add_component(component)
 
     def Start_cooldown(self):
@@ -67,7 +69,7 @@ class Attack(GameObject):
 
     def OnCollision(self, other):
         # is a player or enemy that is not it's own
-        if (not self._has_hit) & ((other.__class__.__name__ == "Player") | (other.__class__.__name__ == "Enemy")):# & (other != self._character):
+        if (not self._has_hit) & ((other.__class__.__name__ == "Player") | (other.__class__.__name__ == "Enemy")) & (other != self._character):
             self._has_hit = True
             if (not other.blocking) | self.data.ignores_block:
                 other.Take_knockback(self.data.knockback, self._facing)

@@ -14,6 +14,9 @@ class Block_command(Command):
         if (not is_repeated) & self.Pass_filter(self._player.input_filter):
             self._player.Block_toggle()
 
+            # plays animation (moved Block_toggle)
+            #self._player.asset_pack.Play_Block_Animation()
+
             # tells character that an action has been made
             self._player.Action_notification()
 
