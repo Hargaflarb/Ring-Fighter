@@ -5,6 +5,8 @@ from CharacterAssetsPack import Character_assets_pack
 from random import Random
 from abc import ABC
 import pygame
+from Attacks.AttackData import Attack_Data
+from Attacks.AttackType import Attack_type
 
 class Character(GameObject):
     def __init__(self, game_world, position, scale, direction, character_name, difficulty):

@@ -77,9 +77,9 @@ class Game_manager():
         self._current_match = -1
         self._score=0
         self._match_datas.clear()
-        self._match_datas.append(Match_data(self._game_world, "some type", character,"Echo"))
-        self._match_datas.append(Match_data(self._game_world, "some type", character,"Emma"))
-        self._match_datas.append(Match_data(self._game_world, "some type", character,"Malthe"))
+        self._match_datas.append(Match_data(self._game_world, "some type", character,"Echo", "Easy"))
+        self._match_datas.append(Match_data(self._game_world, "some type", character,"Emma", "Medium"))
+        self._match_datas.append(Match_data(self._game_world, "some type", character,"Malthe", "Boss"))
         sm=SoundManager.instance
         sm.Play_music("fighting")
         self._game_world.game_state=Game_States.Gameplay
